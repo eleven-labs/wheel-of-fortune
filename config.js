@@ -64,13 +64,13 @@ var planets = [{
 var segments = [{
   label: 'sirius',
   color: 'blue'
-},{
+}, {
   label: 'zackers',
   color: 'red'
-},{
+}, {
   label: 'eleven',
   color: 'yellow'
 }, {
   label: 'angular',
   color: 'green'
-}/**/];
+} /**/ ];

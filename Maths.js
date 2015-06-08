@@ -8,6 +8,7 @@
  * c = delta value
  * d = duration
  */
+ 
 var Ease = {
   inCubic: function(t, b, c, d) {
     t /= d;

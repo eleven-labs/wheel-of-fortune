@@ -14,6 +14,7 @@ function Arrow(x, y, w, h) {
 
   this.createBody();
 }
+
 Arrow.prototype = {
   createBody: function() {
     this.createArrowShape();
@@ -40,7 +41,7 @@ Arrow.prototype = {
   },
   draw: function() {
     ctx.save();
-    
+
     ctx.translate(this.pX, this.pY);
 
     ctx.fillStyle = 'red';
@@ -53,6 +54,6 @@ Arrow.prototype = {
     ctx.closePath();
     ctx.fill();
     ctx.restore();
-    
+
   }
 };

@@ -13,7 +13,6 @@ window.onload = function() {
 };
 
 function initNavigation() {
-
   var lever = '<div class="switch">' +
     '<label>' +
     'Off' +
@@ -32,7 +31,9 @@ function initNavigation() {
     var elements = div.firstChild;
     collection[0].appendChild(elements);
   }
+
   var items = document.querySelectorAll('.collection-item');
+
   for (var i = 0; i < items.length; i++) {
     items[i].textContent = planets[i].name;
     var div = document.createElement('div');
@@ -40,7 +41,9 @@ function initNavigation() {
     var elements = div.firstChild;
     items[i].appendChild(elements);
   }
+
   items = document.querySelectorAll('.switch input');
+
   for (var i = 0; i < items.length; i++) {
     items[i].setAttribute("data-planet", i);
     items[i].addEventListener('change', function(e) {
@@ -92,7 +95,6 @@ function initSegments(activePlanets) {
           id: planet.id
         })
       }
-
     }
   }
 }
@@ -102,11 +104,11 @@ function initPhysics() {
   world.solver.iterations = 100;
   world.solver.tolerance = 0;
 
-  var wheelRadius = 8,
-    wheelX = physicsCenterX,
-    wheelY = wheelRadius + 4,
-    arrowX = wheelX + wheelRadius + 1.3,
-    arrowY = wheelY;
+  var wheelRadius = 8;
+  var wheelX = physicsCenterX;
+  var wheelY = wheelRadius + 4;
+  var arrowX = wheelX + wheelRadius + 1.3;
+  var arrowY = wheelY;
 
   wheel = new Wheel(wheelX, wheelY, wheelRadius, segments, 0.25, 7.5);
   wheel.body.angle = 0;
@@ -160,15 +162,12 @@ function checkStartDrag(e) {
 }
 
 function checkEndDrag(e) {
-  
   if (mouseConstraint) {
     world.removeConstraint(mouseConstraint);
     mouseConstraint = null;
 
     if (wheelSpinning === false && wheelStopped === true) {
-
       if (Math.abs(wheel.body.angularVelocity) > 5) {
-
         //adapt angularVelocity to tend toward 16
         var targetSpeed = 16;
 
@@ -192,11 +191,11 @@ function checkEndDrag(e) {
 }
 
 function getPhysicsCoord(e) {
-  var rect = drawingCanvas.getBoundingClientRect(),
-    clientX = e.clientX || e.touches[0].clientX,
-    clientY = e.clientY || e.touches[0].clientY,
-    x = (clientX - rect.left) / ppm,
-    y = physicsHeight - (clientY - rect.top) / ppm;
+  var rect = drawingCanvas.getBoundingClientRect();
+  var clientX = e.clientX || e.touches[0].clientX;
+  var clientY = e.clientY || e.touches[0].clientY;
+  var x = (clientX - rect.left) / ppm;
+  var y = physicsHeight - (clientY - rect.top) / ppm;
 
   return {
     x: x,
@@ -226,7 +225,6 @@ function update() {
   world.step(timeStep * 0.5);
 
   if (wheelSpinning === true && wheelStopped === false && Math.abs(wheel.body.angularVelocity) < 0.05) {
-
     wheelStopped = true;
     wheelSpinning = false;
     wheel.sound.pause();
@@ -237,7 +235,7 @@ function update() {
 
     if (win) {
       spawnPartices();
-      statusLabel.innerHTML = 'Bienvenue chez les <br />'+win.label+' !!!';
+      statusLabel.innerHTML = 'Bienvenue chez les <br />' + win.label + ' !!!';
       statusLabel.classList.toggle('active');
     }
   }

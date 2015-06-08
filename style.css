@@ -1,0 +1,78 @@
+body {
+  background-color: #283332;
+  margin: 0;
+}
+
+.centered {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#container {
+  width: 768px;
+  background-image: url(background.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+#status_label {
+  position: absolute;
+  top: 0;
+  width: 768px;
+  color: white;
+  font-family: 'impact';
+  font-size: 20px;
+  text-align: center;
+  pointer-events: none;
+  font-weight: bolder;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px black;
+  transition: all 2s;
+}
+
+#status_label.active {
+  top: 300px;
+  font-size: 40px;
+  text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
+}
+
+#canvas {
+  position: absolute;
+}
+
+#menu {
+  width: 400px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -400px;
+  z-index: 10;
+  box-shadow: 5px 0 10px black;
+  background-color: white;
+  transition: left 1s;
+}
+
+#menu.active {
+  left: 0;
+}
+
+#menu_button {
+  position: absolute;
+  left: 400px;
+  height: 48px;
+  width: 48px;
+  /*background-color: rgba(255, 255, 255, 1);*/
+}
+
+#menu_button:hover {
+  cursor: pointer;
+}
+
+.collection {
+  margin: 0;
+}

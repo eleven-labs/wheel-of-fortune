@@ -1,6 +1,7 @@
 /////////////////////////////
 // your reward
 /////////////////////////////
+
 Particle = function(p0, p1, p2, p3) {
   this.p0 = p0;
   this.p1 = p1;
@@ -16,6 +17,7 @@ Particle = function(p0, p1, p2, p3) {
 
   this.complete = false;
 };
+
 Particle.prototype = {
   update: function() {
     this.time = Math.min(this.duration, this.time + timeStep);
@@ -45,6 +47,7 @@ Particle.prototype = {
     ctx.restore();
   }
 };
+
 Point = function(x, y) {
   this.x = x || 0;
   this.y = y || 0;

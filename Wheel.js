@@ -1,6 +1,7 @@
 /////////////////////////////
 // wheel of fortune
 /////////////////////////////
+
 function Wheel(x, y, radius, segments) {
   this.x = x;
   this.y = y;
@@ -15,6 +16,7 @@ function Wheel(x, y, radius, segments) {
 
   this.createBody();
 }
+
 Wheel.prototype = {
   createBody: function() {
     this.body = new p2.Body({
@@ -34,6 +36,7 @@ Wheel.prototype = {
     world.addBody(axis);
     world.addConstraint(constraint);
   },
+
   getScore: function() {
     var currentRotation = wheel.body.angle % TWO_PI;
     //currentRotation += this.deltaPI / 2; // offset 
@@ -43,6 +46,7 @@ Wheel.prototype = {
 
     return currentSegment;
   },
+
   draw: function() {
     // TODO this should be cached in a canvas, and drawn as an image
     ctx.save();
@@ -59,8 +63,8 @@ Wheel.prototype = {
 
     ctx.restore();
   },
-  drawSegments: function() {
 
+  drawSegments: function() {
     for (var i = 0; i < this.segments.length; i++) {
       ctx.fillStyle = this.segments[i].color;
       ctx.beginPath();
@@ -73,7 +77,7 @@ Wheel.prototype = {
     for (var i = 0; i < this.segments.length; i++) {
       ctx.save();
       ctx.rotate(-HALF_PI);
-      ctx.rotate(i * this.deltaPI + this.deltaPI/2);
+      ctx.rotate(i * this.deltaPI + this.deltaPI / 2);
       //ctx.rotate(-this.deltaPI/this.segments.length);
       ctx.textAlign = "center";
       ctx.fillStyle = 'yellow';
@@ -83,6 +87,7 @@ Wheel.prototype = {
       ctx.restore();
     }
   },
+
   initAssets: function() {
     var sound = document.createElement('audio');
     sound.setAttribute('src', 'http://bramp.net/javascript/wheel.mp3');
