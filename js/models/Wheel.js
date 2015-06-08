@@ -94,11 +94,11 @@ Wheel.prototype = {
     this.sound = sound;
 
     var soundFound = document.createElement('audio');
-    soundFound.setAttribute('src', 'result.mp3');
+    soundFound.setAttribute('src', 'sounds/result.mp3');
     this.soundFound = soundFound;
 
     var img = new Image(); // Create new img element
-    img.src = 'rocket.png'; // Set source path
+    img.src = 'images/rocket.png'; // Set source path
     this.img = {};
     this.img.rocket = img;
   }
