@@ -3,103 +3,111 @@
 /////////////////////////////
 
 function Wheel(x, y, radius, segments) {
+  'use strict';
+
   this.x = x;
   this.y = y;
   this.radius = radius;
   this.segments = segments;
 
-  this.pX = this.x * ppm;
-  this.pY = (physicsHeight - this.y) * ppm;
-  this.pRadius = this.radius * ppm;
+  this.pX = this.x * config.physics.ppm;
+  this.pY = (config.physics.physicsHeight - this.y) * config.physics.ppm;
+  this.pRadius = this.radius * config.physics.ppm;
 
-  this.deltaPI = TWO_PI / this.segments.length;
+  this.deltaPI = Math.PI * 2 / this.segments.length;
 
   this.createBody();
 }
 
-Wheel.prototype = {
-  createBody: function() {
+(function() {
+  'use strict';
+
+  Wheel.prototype.createBody = function() {
     this.body = new p2.Body({
       mass: 1,
       position: [this.x, this.y]
     });
+
     this.body.angularDamping = 0.5;
     this.body.addShape(new p2.Circle(this.radius));
 
     var axis = new p2.Body({
       position: [this.x, this.y]
     });
+
     var constraint = new p2.LockConstraint(this.body, axis);
     constraint.collideConnected = false;
 
-    world.addBody(this.body);
-    world.addBody(axis);
-    world.addConstraint(constraint);
-  },
+    config.world.addBody(this.body);
+    config.world.addBody(axis);
+    config.world.addConstraint(constraint);
+  };
 
-  getScore: function() {
-    var currentRotation = wheel.body.angle % TWO_PI;
-    //currentRotation += this.deltaPI / 2; // offset 
-    if (currentRotation < 0) currentRotation += TWO_PI; // positive value
+  Wheel.prototype.getScore = function() {
+    var currentRotation = config.wheel.body.angle % (Math.PI * 2);
+    //currentRotation += this.deltaPI / 2; // offset
+    if (currentRotation < 0) {
+      currentRotation += Math.PI * 2; // positive value
+    }
 
     var currentSegment = Math.floor(currentRotation / this.deltaPI);
 
     return currentSegment;
-  },
+  };
 
-  draw: function() {
+  Wheel.prototype.draw = function() {
     // TODO this should be cached in a canvas, and drawn as an image
-    ctx.save();
-    ctx.translate(this.pX, this.pY);
+    config.ctx.save();
+    config.ctx.translate(this.pX, this.pY);
 
-    ctx.beginPath();
-    ctx.fillStyle = 'black';
-    ctx.arc(0, 0, this.pRadius + 20, 0, TWO_PI);
-    ctx.fill();
+    config.ctx.beginPath();
+    config.ctx.fillStyle = 'black';
+    config.ctx.arc(0, 0, this.pRadius + 20, 0, Math.PI * 2);
+    config.ctx.fill();
 
-    ctx.rotate(-this.body.angle);
+    config.ctx.rotate(-this.body.angle);
 
     this.drawSegments();
 
-    ctx.restore();
-  },
+    config.ctx.restore();
+  };
 
-  drawSegments: function() {
+  Wheel.prototype.drawSegments = function() {
     for (var i = 0; i < this.segments.length; i++) {
-      ctx.fillStyle = this.segments[i].color;
-      ctx.beginPath();
-      ctx.arc(0, 0, this.pRadius, i * this.deltaPI, (i + 1) * this.deltaPI);
-      ctx.lineTo(0, 0);
-      ctx.closePath();
-      ctx.fill();
+      config.ctx.fillStyle = this.segments[i].color;
+      config.ctx.beginPath();
+      config.ctx.arc(0, 0, this.pRadius, i * this.deltaPI, (i + 1) * this.deltaPI);
+      config.ctx.lineTo(0, 0);
+      config.ctx.closePath();
+      config.ctx.fill();
     }
 
-    for (var i = 0; i < this.segments.length; i++) {
-      ctx.save();
-      ctx.rotate(-HALF_PI);
-      ctx.rotate(i * this.deltaPI + this.deltaPI / 2);
-      //ctx.rotate(-this.deltaPI/this.segments.length);
-      ctx.textAlign = "center";
-      ctx.fillStyle = 'yellow';
-      ctx.fillText(this.segments[i].label, 0, 205);
-      // if(this.segments[i].type)
-      ctx.drawImage(this.img.rocket, -this.img.rocket.width / 2, 100);
-      ctx.restore();
+    for (var j = 0; j < this.segments.length; j++) {
+      config.ctx.save();
+      config.ctx.rotate(-Math.PI * 0.5);
+      config.ctx.rotate(j * this.deltaPI + this.deltaPI / 2);
+      //config.ctx.rotate(-this.deltaPI/this.segments.length);
+      config.ctx.textAlign = "center";
+      config.ctx.fillStyle = 'yellow';
+      config.ctx.fillText(this.segments[j].label, 0, 205);
+      // if(this.segments[j].type)
+      config.ctx.drawImage(this.img.rocket, -this.img.rocket.width / 2, 100);
+      config.ctx.restore();
     }
-  },
+  };
 
-  initAssets: function() {
+  Wheel.prototype.initAssets = function() {
     var sound = document.createElement('audio');
-    sound.setAttribute('src', 'http://bramp.net/javascript/wheel.mp3');
+    sound.setAttribute('src', config.sounds.wheelSpin);
     this.sound = sound;
 
     var soundFound = document.createElement('audio');
-    soundFound.setAttribute('src', 'sounds/result.mp3');
+    soundFound.setAttribute('src', config.sounds.wheelFound);
     this.soundFound = soundFound;
 
     var img = new Image(); // Create new img element
-    img.src = 'images/rocket.png'; // Set source path
+    img.src = config.images.defaultPlanetIcon; // Set source path
     this.img = {};
     this.img.rocket = img;
-  }
-};
+  };
+})();
