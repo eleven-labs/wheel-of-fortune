@@ -48,14 +48,14 @@ function Particle(p0, p1, p2, p3) {
   };
 
   Particle.prototype.draw = function() {
-    config.ctx.save();
-    config.ctx.translate(this.x, this.y);
-    config.ctx.rotate(this.r);
-    config.ctx.scale(1, this.sy);
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.r);
+    ctx.scale(1, this.sy);
 
-    config.ctx.fillStyle = this.color;
-    config.ctx.fillRect(-this.w * 0.5, -this.h * 0.5, this.w, this.h);
+    ctx.fillStyle = this.color;
+    ctx.fillRect(-this.w * 0.5, -this.h * 0.5, this.w, this.h);
 
-    config.ctx.restore();
+    ctx.restore();
   };
 })();

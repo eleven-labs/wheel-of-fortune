@@ -13,17 +13,18 @@ body {
 }
 
 #container {
-  width: 768px;
+  width: 100%;
   background-image: url(../images/background.jpg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  overflow: hidden;
 }
 
 #status_label {
   position: absolute;
   top: 0;
-  width: 768px;
+  width: 100%;
   color: white;
   font-family: 'impact';
   font-size: 20px;
@@ -43,6 +44,8 @@ body {
 
 #canvas {
   position: absolute;
+  top: 0px;
+  left: 0px;
 }
 
 #menu {

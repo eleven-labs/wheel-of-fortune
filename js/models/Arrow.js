@@ -5,14 +5,10 @@
 function Arrow(x, y, w, h) {
   'use strict';
 
-  this.x = x;
-  this.y = y;
+  this.updatePosition(x, y);
   this.w = w;
   this.h = h;
   this.verts = [];
-
-  this.pX = this.x * config.physics.ppm;
-  this.pY = (config.physics.physicsHeight - this.y) * config.physics.ppm;
   this.pVerts = [];
 
   this.createBody();
@@ -44,22 +40,25 @@ function Arrow(x, y, w, h) {
     return shape;
   };
 
-  Arrow.prototype.update = function() {
-
+  Arrow.prototype.updatePosition = function(x, y) {
+    this.x = x;
+    this.y = y;
+    this.pX = this.x * config.physics.ppm;
+    this.pY = (config.physics.physicsHeight - this.y) * config.physics.ppm;
   };
 
   Arrow.prototype.draw = function() {
-    config.ctx.save();
-    config.ctx.translate(this.pX, this.pY);
-    config.ctx.fillStyle = 'red';
+    ctx.save();
+    ctx.translate(this.pX, this.pY);
+    ctx.fillStyle = 'red';
 
-    config.ctx.beginPath();
-    config.ctx.moveTo(this.pVerts[0][0], this.pVerts[0][1]);
-    config.ctx.lineTo(this.pVerts[1][0], this.pVerts[1][1]);
-    config.ctx.lineTo(this.pVerts[2][0], this.pVerts[2][1]);
-    config.ctx.lineTo(this.pVerts[3][0], this.pVerts[3][1]);
-    config.ctx.closePath();
-    config.ctx.fill();
-    config.ctx.restore();
+    ctx.beginPath();
+    ctx.moveTo(this.pVerts[0][0], this.pVerts[0][1]);
+    ctx.lineTo(this.pVerts[1][0], this.pVerts[1][1]);
+    ctx.lineTo(this.pVerts[2][0], this.pVerts[2][1]);
+    ctx.lineTo(this.pVerts[3][0], this.pVerts[3][1]);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
   };
 })();
