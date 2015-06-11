@@ -36,6 +36,12 @@
 
   function checkStartDrag() {
     if (world.hitTest(mouseBody.position, [wheel.body])[0]) {
+      if (wheelSpinning === true) {
+        wheelSpinning = false;
+        wheelStopped = true;
+        statusLabel.innerHTML = config.wording.stopBeforeEnd;
+        wheel.sound.pause();
+      }
       statusLabel.className = '';
       mouseConstraint = new p2.RevoluteConstraint(mouseBody, wheel.body, {
         worldPivot: mouseBody.position,
@@ -43,13 +49,6 @@
       });
 
       world.addConstraint(mouseConstraint);
-    }
-
-    if (wheelSpinning === true) {
-      wheelSpinning = false;
-      wheelStopped = true;
-      statusLabel.innerHTML = config.wording.stopBeforeEnd;
-      wheel.sound.pause();
     }
   }
 
@@ -115,8 +114,8 @@
     drawingCanvas.width = canvas.viewWidth;
     drawingCanvas.height = canvas.viewHeight;
 
-    arrow.updatePosition(config.arrow.x, config.arrow.y);
-    wheel.updatePosition(config.wheel.x, config.wheel.y);
+    arrow.updatePosition(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h);
+    wheel.updatePosition(config.wheel.x, config.wheel.y, config.wheel.radius);
 
     if (!wheelSpinning || wheelStopped || Math.abs(wheel.body.angularVelocity) >= 0.05) {
       return;
@@ -158,7 +157,8 @@
     segments.push({
       label: planet.shortName,
       color: planet.color,
-      id: planet.id
+      id: planet.id,
+      icon: planet.icon,
     });
   }
 
@@ -200,7 +200,7 @@
     wheel.body.angularVelocity = 0;
     wheel.initAssets();
 
-    arrow = new Arrow(config.arrow.x, config.arrow.y, 1.5, 0.5);
+    arrow = new Arrow(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h);
     mouseBody = new p2.Body();
 
     world.addBody(mouseBody);

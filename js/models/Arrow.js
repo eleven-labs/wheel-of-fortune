@@ -5,9 +5,7 @@
 function Arrow(x, y, w, h) {
   'use strict';
 
-  this.updatePosition(x, y);
-  this.w = w;
-  this.h = h;
+  this.updatePosition(x, y, w, h);
   this.verts = [];
   this.pVerts = [];
 
@@ -40,11 +38,14 @@ function Arrow(x, y, w, h) {
     return shape;
   };
 
-  Arrow.prototype.updatePosition = function(x, y) {
+  Arrow.prototype.updatePosition = function(x, y, w, h) {
     this.x = x;
     this.y = y;
     this.pX = this.x * config.physics.ppm;
-    this.pY = (config.physics.physicsHeight - this.y) * config.physics.ppm;
+    this.pY = config.physics.physicsHeight * 0.5 * config.physics.ppm;
+
+    this.w = w;
+    this.h = h;
   };
 
   Arrow.prototype.draw = function() {

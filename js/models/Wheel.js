@@ -5,11 +5,8 @@
 function Wheel(x, y, radius, segments) {
   'use strict';
 
-  this.updatePosition(x, y);
-  this.radius = radius;
+  this.updatePosition(x, y, radius);
   this.segments = segments;
-
-  this.pRadius = this.radius * config.physics.ppm;
   this.deltaPI = Math.PI * 2 / this.segments.length;
 
   this.createBody();
@@ -18,11 +15,14 @@ function Wheel(x, y, radius, segments) {
 (function() {
   'use strict';
 
-  Wheel.prototype.updatePosition = function(x, y) {
+  Wheel.prototype.updatePosition = function(x, y, radius) {
     this.x = x;
     this.y = y;
     this.pX = this.x * config.physics.ppm;
-    this.pY = (config.physics.physicsHeight - this.y) * config.physics.ppm;
+    this.pY = config.physics.physicsHeight * 0.5 * config.physics.ppm;
+
+    this.radius = radius;
+    this.pRadius = this.radius * config.physics.ppm;
 
     if (this.body) {
       this.body.position = [this.x, this.y];
@@ -89,16 +89,35 @@ function Wheel(x, y, radius, segments) {
       ctx.fill();
     }
 
+    var minImageY = this.pRadius * 0.4;
+    var maxHeight = this.pRadius * 0.5 * 0.7;
+
     for (var j = 0; j < this.segments.length; j++) {
+      var segmentLabel = this.segments[j].label;
+
       ctx.save();
       ctx.rotate(-Math.PI * 0.5);
       ctx.rotate(j * this.deltaPI + this.deltaPI / 2);
       //ctx.rotate(-this.deltaPI/this.segments.length);
       ctx.textAlign = "center";
+
       ctx.fillStyle = 'yellow';
-      ctx.fillText(this.segments[j].label, 0, 205);
-      // if(this.segments[j].type)
-      ctx.drawImage(this.img.rocket, -this.img.rocket.width / 2, 100);
+      ctx.fillText(this.segments[j].label, 0, this.pRadius + 12);
+
+      var image = this.img[segmentLabel] ? this.img[segmentLabel] : this.img.default;
+
+      var height = maxHeight;
+      var width = (height * image.width) / image.height;
+      var imageY = minImageY + height * 0.5;
+
+      if (image.width > image.height) {
+        var percent = image.height / image.width;
+        percent = percent < 0.8 ? percent : 0.8;
+        width = width * percent;
+        height = (width * image.height) / image.width;
+      }
+
+      ctx.drawImage(image, -width / 2, imageY, width, height);
       ctx.restore();
     }
   };
@@ -112,9 +131,16 @@ function Wheel(x, y, radius, segments) {
     soundFound.setAttribute('src', config.sounds.wheelFound);
     this.soundFound = soundFound;
 
-    var img = new Image(); // Create new img element
-    img.src = config.images.defaultPlanetIcon; // Set source path
     this.img = {};
-    this.img.rocket = img;
+
+    this.img.default = new Image(); // Create new img element
+    this.img.default.src = config.images.defaultPlanetIcon; // Set source path
+
+    for (var i = 0; i < this.segments.length; i++) {
+      if (this.segments[i].icon) {
+        this.img[this.segments[i].label] = new Image();
+        this.img[this.segments[i].label].src = this.segments[i].icon;
+      }
+    }
   };
 })();

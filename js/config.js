@@ -18,7 +18,7 @@ var config = (function() {
     var physicsCenterX = physicsWidth * 0.5;
     var physicsCenterY = physicsHeight * 0.5;
 
-    var wheelRadius = 8;
+    var wheelRadius = (physicsWidth < physicsHeight * 0.8 ? physicsWidth : physicsHeight * 0.8) * 0.4;
     var wheelX = physicsCenterX;
     var wheelY = wheelRadius + 4;
 
@@ -51,6 +51,8 @@ var config = (function() {
       arrow: {
         x: wheelX + wheelRadius + 1.3,
         y: wheelY,
+        w: wheelRadius * 0.1875,
+        h: wheelRadius * 0.0625,
       },
 
       sounds: {
@@ -70,27 +72,31 @@ var config = (function() {
 
       planets: [{
         shortName: 'Asgard',
-        name: 'Racoons of Asgard',
-        icon: 'rocket.png',
-        color: 'yellow',
+        name: 'Raccoons of Asgard',
+        icon: 'images/raccoon-icon.png',
+        blazon: 'images/raccoon-blaze.png',
+        color: '#FECB00',
         id: 0
       }, {
-        shortName: 'SchizoCats',
-        name: 'SchizoCats',
-        icon: 'rocket.png',
-        color: 'blue',
+        shortName: 'Schizo Cats',
+        name: 'Schizo Cats',
+        icon: 'images/schizo-icon.png',
+        blazon: 'images/schizo-blaze.png',
+        color: '#014991',
         id: 1
       }, {
         shortName: 'Duck Invaders',
         name: 'Duck Invaders',
-        icon: 'rocket.png',
-        color: 'green',
+        icon: 'images/duck-icon.png',
+        blazon: 'images/duck-blaze.png',
+        color: '#46CD4D',
         id: 2
       }, {
         shortName: 'Donut Factory',
         name: 'Donut Factory',
-        icon: 'rocket.png',
-        color: 'white',
+        icon: 'images/donut-icon.png',
+        blazon: 'images/donut-blaze.png',
+        color: '#D50B01',
         id: 3
       }],
     };

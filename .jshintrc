@@ -95,9 +95,13 @@
         "TWO_PI"      : true,
         "HALF_PI"     : true,
         "Wheel"       : true,
-        "Maths"        : true,
+        "Maths"       : true,
         "Particle"    : true,
         "Point"       : true,
-        "Arrow"       : true
+        "Arrow"       : true,
+        "world"       : true,
+        "wheel"       : true,
+        "arrow"       : true,
+        "ctx"         : true
     }        // additional predefined global variables
 }
