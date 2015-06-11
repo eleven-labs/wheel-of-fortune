@@ -23,6 +23,10 @@ function Wheel(x, y, radius, segments) {
     this.y = y;
     this.pX = this.x * config.physics.ppm;
     this.pY = (config.physics.physicsHeight - this.y) * config.physics.ppm;
+
+    if (this.body) {
+      this.body.position = [this.x, this.y];
+    }
   };
 
   Wheel.prototype.createBody = function() {

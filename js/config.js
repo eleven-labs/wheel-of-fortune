@@ -8,7 +8,7 @@ var world = null;
 var config = (function() {
   'use strict';
 
-  function updateConfig() {
+  function getUpdatedConfig() {
     var viewWidth = window.innerWidth;
     var viewHeight = window.innerHeight;
 
@@ -23,7 +23,7 @@ var config = (function() {
     var wheelY = wheelRadius + 4;
 
     return {
-      update: updateConfig,
+      getUpdatedConfig: getUpdatedConfig,
 
       // canvas settings
       canvas: {
@@ -96,5 +96,5 @@ var config = (function() {
     };
   }
 
-  return updateConfig();
+  return getUpdatedConfig();
 })();

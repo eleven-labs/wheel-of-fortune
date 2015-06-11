@@ -108,7 +108,7 @@
 
     world.step(canvas.timeStep * 0.5);
 
-    config.update();
+    config = config.getUpdatedConfig();
     canvas = config.canvas;
     physics = config.physics;
 
