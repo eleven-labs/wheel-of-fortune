@@ -8,6 +8,7 @@
 
   var drawingCanvas = document.getElementById('canvas');
   var statusLabel = document.getElementById('status_label');
+  var resultPanel = document.getElementById('result_panel');
 
   var particles = [];
   var segments = [];
@@ -35,21 +36,20 @@
   }
 
   function checkStartDrag() {
-    if (config.world.hitTest(mouseBody.position, [config.wheel.body])[0]) {
+    if (world.hitTest(mouseBody.position, [wheel.body])[0]) {
+      if (wheelSpinning === true) {
+        wheelSpinning = false;
+        wheelStopped = true;
+        statusLabel.innerHTML = config.wording.stopBeforeEnd;
+        wheel.sound.pause();
+      }
       statusLabel.className = '';
-      mouseConstraint = new p2.RevoluteConstraint(mouseBody, config.wheel.body, {
+      mouseConstraint = new p2.RevoluteConstraint(mouseBody, wheel.body, {
         worldPivot: mouseBody.position,
         collideConnected: false
       });
 
-      config.world.addConstraint(mouseConstraint);
-    }
-
-    if (wheelSpinning === true) {
-      wheelSpinning = false;
-      wheelStopped = true;
-      statusLabel.innerHTML = config.wording.stopBeforeEnd;
-      config.wheel.sound.pause();
+      world.addConstraint(mouseConstraint);
     }
   }
 
@@ -58,33 +58,33 @@
       return;
     }
 
-    config.world.removeConstraint(mouseConstraint);
+    world.removeConstraint(mouseConstraint);
     mouseConstraint = null;
     statusLabel.innerHTML = config.wording.tooSlow;
 
     if (wheelSpinning && !wheelStopped) {
-      config.wheel.sound.pause();
+      wheel.sound.pause();
       return;
     }
 
-    if (Math.abs(config.wheel.body.angularVelocity) <= 5) {
+    if (Math.abs(wheel.body.angularVelocity) <= 5) {
       return;
     }
 
     //adapt angularVelocity to tend toward 16
     var targetSpeed = 16;
 
-    targetSpeed = config.wheel.body.angularVelocity > 0 ? targetSpeed : -targetSpeed;
-    var velocity = config.wheel.body.angularVelocity;
+    targetSpeed = wheel.body.angularVelocity > 0 ? targetSpeed : -targetSpeed;
+    var velocity = wheel.body.angularVelocity;
     var diff = targetSpeed - velocity;
-    config.wheel.body.angularVelocity = velocity + diff / 1.5;
-    console.log('initial velocity : ' + velocity + ' adapted to ' + config.wheel.body.angularVelocity);
+    wheel.body.angularVelocity = velocity + diff / 1.5;
+    console.log('initial velocity : ' + velocity + ' adapted to ' + wheel.body.angularVelocity);
 
     wheelSpinning = true;
     wheelStopped = false;
     statusLabel.innerHTML = '';
-    config.wheel.sound.currentTime = 0;
-    config.wheel.sound.play();
+    wheel.sound.currentTime = 0;
+    wheel.sound.play();
   }
 
   function spawnPartices() {
@@ -106,32 +106,50 @@
       }
     });
 
-    config.world.step(canvas.timeStep * 0.5);
+    world.step(canvas.timeStep * 0.5);
 
-    if (!wheelSpinning || wheelStopped || Math.abs(config.wheel.body.angularVelocity) >= 0.05) {
+    config = config.getUpdatedConfig();
+    canvas = config.canvas;
+    physics = config.physics;
+
+    drawingCanvas.width = canvas.viewWidth;
+    drawingCanvas.height = canvas.viewHeight;
+
+    arrow.updatePosition(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h);
+    wheel.updatePosition(config.wheel.x, config.wheel.y, config.wheel.radius);
+
+    if (!wheelSpinning || wheelStopped || Math.abs(wheel.body.angularVelocity) >= 0.05) {
       return;
     }
 
     wheelStopped = true;
     wheelSpinning = false;
-    config.wheel.sound.pause();
-    config.wheel.soundFound.play();
+    wheel.sound.pause();
+    wheel.soundFound.play();
 
-    config.wheel.body.angularVelocity = 0;
-    var win = config.wheel.segments[config.wheel.getScore()];
+    wheel.body.angularVelocity = 0;
+    var win = wheel.segments[wheel.getScore()];
 
     if (win) {
       spawnPartices();
-      statusLabel.innerHTML = resultTemplate({ planetName: win.label });
+      statusLabel.innerHTML = resultTemplate({
+        planetName: win.name
+      });
       statusLabel.classList.toggle('active');
+
+      var img = _.find(resultPanel.children, {
+        id: 'blaze-' + win.id
+      });
+      img.classList.toggle('active');
+      resultPanel.classList.toggle('active');
     }
   }
 
   function draw() {
-    config.ctx.clearRect(0, 0, canvas.viewWidth, canvas.viewHeight);
+    ctx.clearRect(0, 0, canvas.viewWidth, canvas.viewHeight);
 
-    config.wheel.draw();
-    config.arrow.draw();
+    wheel.draw();
+    arrow.draw();
 
     particles.forEach(function(p) {
       p.draw();
@@ -147,12 +165,16 @@
   function addPlanetSegment(planet) {
     segments.push({
       label: planet.shortName,
+      name: planet.name,
       color: planet.color,
-      id: planet.id
+      id: planet.id,
+      icon: planet.icon,
     });
   }
 
   function initSegments(activePlanets) {
+    segments = [];
+
     if (!activePlanets) {
       activePlanets = planets;
     }
@@ -165,7 +187,7 @@
   function initDrawingCanvas() {
     drawingCanvas.width = canvas.viewWidth;
     drawingCanvas.height = canvas.viewHeight;
-    config.ctx = drawingCanvas.getContext('2d');
+    ctx = drawingCanvas.getContext('2d');
 
     drawingCanvas.addEventListener('mousemove', updateMouseBodyPosition);
     drawingCanvas.addEventListener('mousedown', checkStartDrag);
@@ -179,24 +201,19 @@
   }
 
   function initPhysics() {
-    config.world = new p2.World();
-    config.world.solver.iterations = 100;
-    config.world.solver.tolerance = 0;
+    world = new p2.World();
+    world.solver.iterations = 100;
+    world.solver.tolerance = 0;
 
-    var wheelRadius = 8;
-    var wheelX = physics.physicsCenterX;
-    var wheelY = wheelRadius + 4;
-    var arrowX = wheelX + wheelRadius + 1.3;
-    var arrowY = wheelY;
+    wheel = new Wheel(config.wheel.x, config.wheel.y, config.wheel.radius, segments, 0.25, 7.5);
+    wheel.body.angle = 0;
+    wheel.body.angularVelocity = 0;
+    wheel.initAssets();
 
-    config.wheel = new Wheel(wheelX, wheelY, wheelRadius, segments, 0.25, 7.5);
-    config.wheel.body.angle = 0;
-    config.wheel.body.angularVelocity = 0;
-    config.wheel.initAssets();
-    config.arrow = new Arrow(arrowX, arrowY, 1.5, 0.5);
+    arrow = new Arrow(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h);
     mouseBody = new p2.Body();
 
-    config.world.addBody(mouseBody);
+    world.addBody(mouseBody);
   }
 
   function getActivePlanets() {
@@ -205,7 +222,7 @@
 
     for (var i = 0; i < items.length; i++) {
       if (items[i].checked) {
-        result.push(planets[i].id);
+        result.push(planets[i]);
       }
     }
 
@@ -216,15 +233,15 @@
     // debugger;
     if (e.target.checked) {
       initSegments(getActivePlanets());
-      config.wheel.segments = segments;
+      wheel.segments = segments;
     } else {
-      var planet = e.target.getAttribute('data-planet');
-      _.remove(config.wheel.segments, function(currentObject) {
+      var planet = parseInt(e.target.getAttribute('data-planet'));
+      _.remove(wheel.segments, function(currentObject) {
         return currentObject.id === planet;
       });
     }
 
-    config.wheel.deltaPI = Math.PI * 2 / config.wheel.segments.length;
+    wheel.deltaPI = Math.PI * 2 / wheel.segments.length;
   }
 
   function initNavigation() {
@@ -258,9 +275,9 @@
 
     items = document.querySelectorAll('.switch input');
 
-    for (var k = 0; k < items.length; k++) {
-      items[k].setAttribute("data-planet", i);
-      items[k].addEventListener('change', onSwitchChange);
+    for (var j = 0; j < items.length; j++) {
+      items[j].setAttribute("data-planet", j);
+      items[j].addEventListener('change', onSwitchChange);
     }
   }
 
@@ -275,6 +292,16 @@
 
     menuButton.addEventListener('click', function() {
       document.getElementById('menu').classList.toggle('active');
+    });
+
+    resultPanel.addEventListener('click', function() {
+      this.classList.remove('active');
+
+      for (var i = 0; i < this.children.length; i++) {
+        this.children[i].classList.remove('active');
+      }
+
+      statusLabel.classList.remove('active');
     });
   };
 })();
