@@ -8,6 +8,7 @@
 
   var drawingCanvas = document.getElementById('canvas');
   var statusLabel = document.getElementById('status_label');
+  var resultPanel = document.getElementById('result_panel');
 
   var particles = [];
   var segments = [];
@@ -131,8 +132,16 @@
 
     if (win) {
       spawnPartices();
-      statusLabel.innerHTML = resultTemplate({ planetName: win.label });
+      statusLabel.innerHTML = resultTemplate({
+        planetName: win.name
+      });
       statusLabel.classList.toggle('active');
+
+      var img = _.find(resultPanel.children, {
+        id: 'blaze-' + win.id
+      });
+      img.classList.toggle('active');
+      resultPanel.classList.toggle('active');
     }
   }
 
@@ -156,6 +165,7 @@
   function addPlanetSegment(planet) {
     segments.push({
       label: planet.shortName,
+      name: planet.name,
       color: planet.color,
       id: planet.id,
       icon: planet.icon,
@@ -282,6 +292,16 @@
 
     menuButton.addEventListener('click', function() {
       document.getElementById('menu').classList.toggle('active');
+    });
+
+    resultPanel.addEventListener('click', function() {
+      this.classList.remove('active');
+
+      for (var i = 0; i < this.children.length; i++) {
+        this.children[i].classList.remove('active');
+      }
+
+      statusLabel.classList.remove('active');
     });
   };
 })();

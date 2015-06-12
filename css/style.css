@@ -33,12 +33,41 @@ body {
   text-transform: uppercase;
   text-shadow: 0 0 5px black;
   transition: all 2s;
+  z-index: 9999;
 }
 
 #status_label.active {
-  top: 300px;
+  top: 60%;
   font-size: 40px;
   text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
+}
+
+#result_panel {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-out;
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+#result_panel.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+#result_panel img {
+  max-width: 100%;
+  max-height: 80%;
+  width: auto;
+  height: auto;
+  margin-top: 5%;
+  display: none;
+}
+
+#result_panel img.active {
+  display: block;
 }
 
 #canvas {

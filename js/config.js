@@ -74,28 +74,24 @@ var config = (function() {
         shortName: 'Asgard',
         name: 'Raccoons of Asgard',
         icon: 'images/raccoon-icon.png',
-        blazon: 'images/raccoon-blaze.png',
         color: '#FECB00',
         id: 0
       }, {
         shortName: 'Schizo Cats',
         name: 'Schizo Cats',
         icon: 'images/schizo-icon.png',
-        blazon: 'images/schizo-blaze.png',
         color: '#014991',
         id: 1
       }, {
         shortName: 'Duck Invaders',
         name: 'Duck Invaders',
         icon: 'images/duck-icon.png',
-        blazon: 'images/duck-blaze.png',
         color: '#46CD4D',
         id: 2
       }, {
         shortName: 'Donut Factory',
         name: 'Donut Factory',
         icon: 'images/donut-icon.png',
-        blazon: 'images/donut-blaze.png',
         color: '#D50B01',
         id: 3
       }],
