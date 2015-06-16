@@ -99,11 +99,14 @@
   }
 
   function update() {
-    particles.forEach(function(p) {
-      p.update();
-      if (p.complete) {
-        particles.splice(particles.indexOf(p), 1);
-      }
+    var particlesLength = particles.length;
+
+    for (var i = 0; i < particlesLength; i++) {
+      particles[i].update();
+    }
+
+    _.remove(particles, function(p) {
+      return p.complete;
     });
 
     world.step(canvas.timeStep * 0.5);
@@ -151,9 +154,11 @@
     wheel.draw();
     arrow.draw();
 
-    particles.forEach(function(p) {
-      p.draw();
-    });
+    var particlesLength = particles.length;
+
+    for (var i = 0; i < particlesLength; i++) {
+      particles[i].draw();
+    }
   }
 
   function loop() {
@@ -219,8 +224,9 @@
   function getActivePlanets() {
     var items = document.querySelectorAll('.switch input');
     var result = [];
+    var l = items.length;
 
-    for (var i = 0; i < items.length; i++) {
+    for (var i = 0; i < l; i++) {
       if (items[i].checked) {
         result.push(planets[i]);
       }
@@ -256,28 +262,31 @@
 
     var menuItem = '<a href="#!" class="collection-item"></a>';
     var collection = document.querySelectorAll('div.collection');
+    var planetsLength = planets.length;
 
-    planets.forEach(function() {
+    for (var i = 0; i < planetsLength; i++) {
       var div = document.createElement('div');
       div.innerHTML = menuItem;
       collection[0].appendChild(div.firstChild);
-    });
+    }
 
     var items = document.querySelectorAll('.collection-item');
     var leverDiv = null;
+    var l = items.length;
 
-    for (var i = 0; i < items.length; i++) {
-      items[i].textContent = planets[i].name;
+    for (var j = 0; j < l; j++) {
+      items[j].textContent = planets[j].name;
       leverDiv = document.createElement('div');
       leverDiv.innerHTML = lever;
-      items[i].appendChild(leverDiv.firstChild);
+      items[j].appendChild(leverDiv.firstChild);
     }
 
     items = document.querySelectorAll('.switch input');
+    l = items.length;
 
-    for (var j = 0; j < items.length; j++) {
-      items[j].setAttribute("data-planet", j);
-      items[j].addEventListener('change', onSwitchChange);
+    for (var k = 0; k < l; k++) {
+      items[k].setAttribute("data-planet", k);
+      items[k].addEventListener('change', onSwitchChange);
     }
   }
 
@@ -296,8 +305,9 @@
 
     resultPanel.addEventListener('click', function() {
       this.classList.remove('active');
+      var l = this.children.length;
 
-      for (var i = 0; i < this.children.length; i++) {
+      for (var i = 0; i < l; i++) {
         this.children[i].classList.remove('active');
       }
 

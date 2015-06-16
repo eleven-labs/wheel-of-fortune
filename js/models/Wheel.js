@@ -2,18 +2,16 @@
 // wheel of fortune
 /////////////////////////////
 
-function Wheel(x, y, radius, segments) {
-  'use strict';
-
-  this.updatePosition(x, y, radius);
-  this.segments = segments;
-  this.deltaPI = Math.PI * 2 / this.segments.length;
-
-  this.createBody();
-}
-
 (function() {
   'use strict';
+
+  function Wheel(x, y, radius, segments) {
+    this.updatePosition(x, y, radius);
+    this.segments = segments;
+    this.deltaPI = Math.PI * 2 / this.segments.length;
+
+    this.createBody();
+  }
 
   Wheel.prototype.updatePosition = function(x, y, radius) {
     this.x = x;
@@ -57,9 +55,7 @@ function Wheel(x, y, radius, segments) {
       currentRotation += Math.PI * 2; // positive value
     }
 
-    var currentSegment = Math.floor(currentRotation / this.deltaPI);
-
-    return currentSegment;
+    return Math.floor(currentRotation / this.deltaPI);
   };
 
   Wheel.prototype.draw = function() {
@@ -80,7 +76,9 @@ function Wheel(x, y, radius, segments) {
   };
 
   Wheel.prototype.drawSegments = function() {
-    for (var i = 0; i < this.segments.length; i++) {
+    var l = this.segments.length;
+
+    for (var i = 0; i < l; i++) {
       ctx.fillStyle = this.segments[i].color;
       ctx.beginPath();
       ctx.arc(0, 0, this.pRadius, i * this.deltaPI, (i + 1) * this.deltaPI);
@@ -92,7 +90,7 @@ function Wheel(x, y, radius, segments) {
     var minImageY = this.pRadius * 0.4;
     var maxHeight = this.pRadius * 0.5 * 0.7;
 
-    for (var j = 0; j < this.segments.length; j++) {
+    for (var j = 0; j < l; j++) {
       var segmentLabel = this.segments[j].label;
 
       ctx.save();
@@ -135,12 +133,18 @@ function Wheel(x, y, radius, segments) {
 
     this.img.default = new Image(); // Create new img element
     this.img.default.src = config.images.defaultPlanetIcon; // Set source path
+    var l = this.segments.length;
 
-    for (var i = 0; i < this.segments.length; i++) {
-      if (this.segments[i].icon) {
-        this.img[this.segments[i].label] = new Image();
-        this.img[this.segments[i].label].src = this.segments[i].icon;
+    for (var i = 0; i < l; i++) {
+      var segmentIcon = this.segments[i].icon;
+
+      if (segmentIcon) {
+        var segmentLabel = this.segments[i].label;
+        this.img[segmentLabel] = new Image();
+        this.img[segmentLabel].src = segmentIcon;
       }
     }
   };
+
+  window.Wheel = Wheel;
 })();

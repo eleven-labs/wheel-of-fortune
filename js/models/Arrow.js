@@ -2,18 +2,16 @@
 // arrow on top of the wheel of fortune
 /////////////////////////////
 
-function Arrow(x, y, w, h) {
-  'use strict';
-
-  this.updatePosition(x, y, w, h);
-  this.verts = [];
-  this.pVerts = [];
-
-  this.createBody();
-}
-
 (function() {
   'use strict';
+
+  function Arrow(x, y, w, h) {
+    this.updatePosition(x, y, w, h);
+    this.verts = [];
+    this.pVerts = [];
+
+    this.createBody();
+  }
 
   Arrow.prototype.createBody = function() {
     this.createArrowShape();
@@ -62,4 +60,6 @@ function Arrow(x, y, w, h) {
     ctx.fill();
     ctx.restore();
   };
+
+  window.Arrow = Arrow;
 })();

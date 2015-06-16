@@ -1,10 +1,8 @@
-/*jshint unused:false*/
-
 /////////////////////////////
 // math
 /////////////////////////////
 
-var Maths = (function() {
+(function() {
   'use strict';
 
   /**
@@ -51,7 +49,7 @@ var Maths = (function() {
     return p;
   }
 
-  return {
+  window.Maths = {
     ease: {
       inCubic: inCubic,
       outCubic: outCubic,

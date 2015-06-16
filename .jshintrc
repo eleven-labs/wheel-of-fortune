@@ -92,8 +92,6 @@
         "_"           : true,
         "p2"          : true,
         "config"      : true,
-        "TWO_PI"      : true,
-        "HALF_PI"     : true,
         "Wheel"       : true,
         "Maths"       : true,
         "Particle"    : true,

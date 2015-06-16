@@ -1,34 +1,30 @@
-/*jshint unused:false*/
-
 /////////////////////////////
 // your reward
 /////////////////////////////
 
-function Point(x, y) {
-  'use strict';
-  this.x = x || 0;
-  this.y = y || 0;
-}
-
-function Particle(p0, p1, p2, p3) {
-  'use strict';
-  this.p0 = p0;
-  this.p1 = p1;
-  this.p2 = p2;
-  this.p3 = p3;
-
-  this.time = 0;
-  this.duration = 3 + Math.random() * 2;
-  this.color = 'hsl(' + Math.floor(Math.random() * 360) + ',100%,50%)';
-
-  this.w = 10;
-  this.h = 7;
-
-  this.complete = false;
-}
-
 (function() {
   'use strict';
+
+  function Point(x, y) {
+    this.x = x || 0;
+    this.y = y || 0;
+  }
+
+  function Particle(p0, p1, p2, p3) {
+    this.p0 = p0;
+    this.p1 = p1;
+    this.p2 = p2;
+    this.p3 = p3;
+
+    this.time = 0;
+    this.duration = 3 + Math.random() * 2;
+    this.color = 'hsl(' + Math.floor(Math.random() * 360) + ',100%,50%)';
+
+    this.w = 10;
+    this.h = 7;
+
+    this.complete = false;
+  }
 
   Particle.prototype.update = function() {
     this.time = Math.min(this.duration, this.time + config.canvas.timeStep);
@@ -58,4 +54,7 @@ function Particle(p0, p1, p2, p3) {
 
     ctx.restore();
   };
+
+  window.Point = Point;
+  window.Particle = Particle;
 })();

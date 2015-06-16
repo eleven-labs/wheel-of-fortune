@@ -1,11 +1,4 @@
-/*jshint unused:false*/
-
-var ctx = null;
-var wheel = null;
-var arrow = null;
-var world = null;
-
-var config = (function() {
+(function() {
   'use strict';
 
   function getUpdatedConfig() {
@@ -31,7 +24,7 @@ var config = (function() {
         viewHeight: viewHeight,
         viewCenterX: viewWidth * 0.5,
         viewCenterY: viewHeight * 0.5,
-        timeStep: (1 / 60),
+        timeStep: (1 / 30),
       },
 
       physics: {
@@ -98,5 +91,9 @@ var config = (function() {
     };
   }
 
-  return getUpdatedConfig();
+  window.config = getUpdatedConfig();
+  window.ctx = null;
+  window.wheel = null;
+  window.arrow = null;
+  window.world = null;
 })();
