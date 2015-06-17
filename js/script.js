@@ -74,12 +74,12 @@
     }
 
     //adapt angularVelocity to tend toward 16
-    var targetSpeed = 16;
+    var targetSpeed = 20;
 
     targetSpeed = wheel.body.angularVelocity > 0 ? targetSpeed : -targetSpeed;
     var velocity = wheel.body.angularVelocity;
     var diff = targetSpeed - velocity;
-    wheel.body.angularVelocity = velocity + diff / 1.5;
+    wheel.body.angularVelocity = velocity + diff * 2;
     console.log('initial velocity : ' + velocity + ' adapted to ' + wheel.body.angularVelocity);
 
     wheelSpinning = true;

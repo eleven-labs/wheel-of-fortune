@@ -37,7 +37,7 @@
       position: [this.x, this.y]
     });
 
-    this.body.angularDamping = 0.5;
+    this.body.angularDamping = 0.2;
     this.body.addShape(new p2.Circle(this.radius));
 
     this.axis = new p2.Body({
