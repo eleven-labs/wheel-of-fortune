@@ -16,6 +16,7 @@
   var wheelStopped = true;
   var mouseBody = null;
   var mouseConstraint = null;
+  var playerName = null;
 
   function getPhysicsCoord(e) {
     var rect = drawingCanvas.getBoundingClientRect();
@@ -36,11 +37,11 @@
   }
 
   function checkStartDrag() {
+
     if (world.hitTest(mouseBody.position, [wheel.body])[0]) {
       if (wheelSpinning === true) {
         wheelSpinning = false;
         wheelStopped = true;
-        statusLabel.innerHTML = config.wording.stopBeforeEnd;
         wheel.sound.pause();
       }
       statusLabel.className = '';
@@ -136,7 +137,8 @@
     if (win) {
       spawnPartices();
       statusLabel.innerHTML = resultTemplate({
-        planetName: win.name
+        planetName: win.name,
+        playerName: playerName,
       });
       statusLabel.classList.toggle('active');
 
@@ -168,13 +170,7 @@
   }
 
   function addPlanetSegment(planet) {
-    segments.push({
-      label: planet.shortName,
-      name: planet.name,
-      color: planet.color,
-      id: planet.id,
-      icon: planet.icon,
-    });
+    segments.push(planet);
   }
 
   function initSegments(activePlanets) {
@@ -250,57 +246,24 @@
     wheel.deltaPI = Math.PI * 2 / wheel.segments.length;
   }
 
-  function initNavigation() {
-    var lever = '<div class="switch">' +
-      '<label>' +
-      'Off' +
-      '<input type="checkbox" checked>' +
-      '<span class="lever"></span>' +
-      'On' +
-      '</label>' +
-      '</div>';
-
-    var menuItem = '<a href="#!" class="collection-item"></a>';
-    var collection = document.querySelectorAll('div.collection');
-    var planetsLength = planets.length;
-
-    for (var i = 0; i < planetsLength; i++) {
-      var div = document.createElement('div');
-      div.innerHTML = menuItem;
-      collection[0].appendChild(div.firstChild);
-    }
-
-    var items = document.querySelectorAll('.collection-item');
-    var leverDiv = null;
-    var l = items.length;
-
-    for (var j = 0; j < l; j++) {
-      items[j].textContent = planets[j].name;
-      leverDiv = document.createElement('div');
-      leverDiv.innerHTML = lever;
-      items[j].appendChild(leverDiv.firstChild);
-    }
-
-    items = document.querySelectorAll('.switch input');
-    l = items.length;
-
-    for (var k = 0; k < l; k++) {
-      items[k].setAttribute("data-planet", k);
-      items[k].addEventListener('change', onSwitchChange);
-    }
-  }
-
   window.onload = function() {
     initSegments();
     initDrawingCanvas();
     initPhysics();
-    initNavigation();
     requestAnimationFrame(loop);
 
     var menuButton = document.getElementById('menu_button');
+    var menu = document.getElementById('menu');
+    var menuSwitches = document.querySelectorAll('.switch input');
+    var playerNameInput = document.getElementById('player_name');
+    var l = menuSwitches.length;
 
     menuButton.addEventListener('click', function() {
-      document.getElementById('menu').classList.toggle('active');
+      menu.classList.toggle('active');
+    });
+
+    playerNameInput.addEventListener('change', function() {
+      playerName = this.value || null;
     });
 
     resultPanel.addEventListener('click', function() {
@@ -312,6 +275,11 @@
       }
 
       statusLabel.classList.remove('active');
+      statusLabel.innerHTML = '';
     });
+
+    for (var i = 0; i < l; i++) {
+      menuSwitches[i].addEventListener('change', onSwitchChange);
+    }
   };
 })();

@@ -59,30 +59,29 @@
 
       wording: {
         tooSlow: 'C\'était mou ! Essaie encore.',
-        stopBeforeEnd: 'Tout vient à point à qui sait attendre.',
-        result: 'Bienvenue chez les <br/> <%= planetName %>!!!',
+        result: 'Bienvenue chez les<br/><%= planetName %> !<br/>Félicitation <%= playerName ? playerName + " " : "" %>!',
       },
 
       planets: [{
-        shortName: 'Asgard',
+        label: 'raccoonsofasgard',
         name: 'Raccoons of Asgard',
         icon: 'images/raccoon-icon.png',
         color: '#FECB00',
         id: 0
       }, {
-        shortName: 'Schizo Cats',
+        label: 'schizocats',
         name: 'Schizo Cats',
         icon: 'images/schizo-icon.png',
         color: '#014991',
         id: 1
       }, {
-        shortName: 'Duck Invaders',
+        label: 'duckinvaders',
         name: 'Duck Invaders',
         icon: 'images/duck-icon.png',
         color: '#46CD4D',
         id: 2
       }, {
-        shortName: 'Donut Factory',
+        label: 'donutfactory',
         name: 'Donut Factory',
         icon: 'images/donut-icon.png',
         color: '#D50B01',

@@ -25,6 +25,10 @@
     if (this.body) {
       this.body.position = [this.x, this.y];
     }
+
+    if (this.axis) {
+      this.axis.position = [this.x, this.y];
+    }
   };
 
   Wheel.prototype.createBody = function() {
@@ -36,16 +40,16 @@
     this.body.angularDamping = 0.5;
     this.body.addShape(new p2.Circle(this.radius));
 
-    var axis = new p2.Body({
+    this.axis = new p2.Body({
       position: [this.x, this.y]
     });
 
-    var constraint = new p2.LockConstraint(this.body, axis);
-    constraint.collideConnected = false;
+    this.constraint = new p2.LockConstraint(this.body, this.axis);
+    this.constraint.collideConnected = false;
 
     world.addBody(this.body);
-    world.addBody(axis);
-    world.addConstraint(constraint);
+    world.addBody(this.axis);
+    world.addConstraint(this.constraint);
   };
 
   Wheel.prototype.getScore = function() {
@@ -65,7 +69,7 @@
 
     ctx.beginPath();
     ctx.fillStyle = 'black';
-    ctx.arc(0, 0, this.pRadius + 20, 0, Math.PI * 2);
+    ctx.arc(0, 0, this.pRadius + 5, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.rotate(-this.body.angle);
@@ -96,14 +100,8 @@
       ctx.save();
       ctx.rotate(-Math.PI * 0.5);
       ctx.rotate(j * this.deltaPI + this.deltaPI / 2);
-      //ctx.rotate(-this.deltaPI/this.segments.length);
-      ctx.textAlign = "center";
-
-      ctx.fillStyle = 'yellow';
-      ctx.fillText(this.segments[j].label, 0, this.pRadius + 12);
 
       var image = this.img[segmentLabel] ? this.img[segmentLabel] : this.img.default;
-
       var height = maxHeight;
       var width = (height * image.width) / image.height;
       var imageY = minImageY + height * 0.5;

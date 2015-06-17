@@ -12,6 +12,10 @@ body {
   right: 0;
 }
 
+/* ================ */
+/* Canvas Container */
+/* ================ */
+
 #container {
   width: 100%;
   background-image: url(../images/background.jpg);
@@ -76,6 +80,10 @@ body {
   left: 0px;
 }
 
+/* ====== */
+/*  Menu  */
+/* ====== */
+
 #menu {
   width: 400px;
   height: 100%;
@@ -94,7 +102,7 @@ body {
 
 #menu_button {
   position: absolute;
-  left: 400px;
+  left: 410px;
   height: 48px;
   width: 48px;
   /*background-color: rgba(255, 255, 255, 1);*/
@@ -104,6 +112,17 @@ body {
   cursor: pointer;
 }
 
+#player {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .collection {
   margin: 0;
+}
+
+.force {
+  position: relative;
+  top: -22px;
+  left: 70%;
 }

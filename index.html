@@ -9,12 +9,82 @@
 </head>
 
 <body>
-  <div id="menu">
+  <section id="menu">
     <div id="menu_button"><img src="images/ic_menu_48px.svg"></div>
-    <div class="collection">
-    </div>
-  </div>
-  <div id="container" class="centered">
+
+    <section id="player">
+      <label for="player_name">Player Name</label>
+      <input id="player_name" type="text" class="validate">
+    </section>
+
+    <section id= "planets" class="collection">
+      <a href="#!" class="collection-item">
+        <p>Raccoons of Asgard</p>
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" data-planet="0" checked>
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+        <div class="force">
+          <input type="checkbox" class="filled-in" id="force-planet-3" disabled>
+          <label for="force-planet-3">Force</label>
+        </div>
+      </a>
+
+      <a href="#!" class="collection-item">
+        <p>Schizo Cats</p>
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" data-planet="1" checked>
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+        <div class="force">
+          <input type="checkbox" class="filled-in" id="force-planet-3" disabled>
+          <label for="force-planet-3">Force</label>
+        </div>
+      </a>
+
+      <a href="#!" class="collection-item">
+        <p>Duck Invaders</p>
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" data-planet="2" checked>
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+        <div class="force">
+          <input type="checkbox" class="filled-in" id="force-planet-3" disabled>
+          <label for="force-planet-3">Force</label>
+        </div>
+      </a>
+
+      <a href="#!" class="collection-item">
+        <p>Donut Factory</p>
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" data-planet="3" checked>
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+        <div class="force">
+          <input type="checkbox" class="filled-in" id="force-planet-3" disabled>
+          <label for="force-planet-3">Force</label>
+        </div>
+      </a>
+    </section>
+  </section>
+
+  <section id="container" class="centered">
     <canvas id="canvas" class="centered">Your browser doesn't support canvas...</canvas>
     <div id="status_label" class="centered"></div>
     <div id="result_panel" class="centered">
@@ -23,7 +93,8 @@
       <img id="blaze-2" src="images/duck-blaze.png" class="centered">
       <img id="blaze-3" src="images/donut-blaze.png" class="centered">
     </div>
-  </div>
+  </section>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/p2.js/0.6.0/p2.min.js"></script>
   <script src="js/config.js"></script>
