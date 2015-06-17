@@ -9,6 +9,7 @@
   var drawingCanvas = document.getElementById('canvas');
   var statusLabel = document.getElementById('status_label');
   var resultPanel = document.getElementById('result_panel');
+  var menuForces = document.querySelectorAll('.force input');
 
   var particles = [];
   var segments = [];
@@ -246,6 +247,27 @@
     wheel.deltaPI = Math.PI * 2 / wheel.segments.length;
   }
 
+  function onForceChange(e) {
+    if (e.target.checked) {
+      var disabledInputs = _.reject(menuForces, function(menuForce) {
+        return menuForce.id === e.target.id;
+      });
+      var disabledInputsLength = disabledInputs.length;
+
+      for (var i = 0; i < disabledInputsLength; i++) {
+        disabledInputs[i].setAttribute('disabled', 'disabled');
+      }
+
+      return;
+    }
+
+    var l = menuForces.length;
+
+    for (var j = 0; j < l; j++) {
+      menuForces[j].removeAttribute('disabled');
+    }
+  }
+
   window.onload = function() {
     initSegments();
     initDrawingCanvas();
@@ -254,16 +276,15 @@
 
     var menuButton = document.getElementById('menu_button');
     var menu = document.getElementById('menu');
-    var menuSwitches = document.querySelectorAll('.switch input');
-    var playerNameInput = document.getElementById('player_name');
-    var l = menuSwitches.length;
 
     menuButton.addEventListener('click', function() {
       menu.classList.toggle('active');
     });
 
-    playerNameInput.addEventListener('change', function() {
-      playerName = this.value || null;
+    var playerNameInput = document.getElementById('player_name');
+
+    playerNameInput.addEventListener('change', function(e) {
+      playerName = e.target.value || null;
     });
 
     resultPanel.addEventListener('click', function() {
@@ -278,8 +299,17 @@
       statusLabel.innerHTML = '';
     });
 
+    var menuSwitches = document.querySelectorAll('.switch input');
+    var l = menuSwitches.length;
+
     for (var i = 0; i < l; i++) {
       menuSwitches[i].addEventListener('change', onSwitchChange);
+    }
+
+    l = menuForces.length;
+
+    for (var j = 0; j < l; j++) {
+      menuForces[j].addEventListener('change', onForceChange);
     }
   };
 })();
