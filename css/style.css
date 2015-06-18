@@ -119,9 +119,17 @@ body {
   cursor: pointer;
 }
 
-#player {
+#config {
   padding-left: 20px;
   padding-right: 20px;
+}
+
+#wheel_config input {
+  width: 90%;
+}
+
+.range_number {
+  margin-left: 5px;
 }
 
 .collection {

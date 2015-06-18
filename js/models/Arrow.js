@@ -5,12 +5,17 @@
 (function() {
   'use strict';
 
-  function Arrow(x, y, w, h) {
+  function Arrow(x, y, w, h, image) {
     this.updatePosition(x, y, w, h);
     this.verts = [];
     this.pVerts = [];
 
-    this.createBody();
+    if (!image) {
+      return this.createBody();
+    }
+
+    this.image = new Image();
+    this.image.src = config.arrow.image;
   }
 
   Arrow.prototype.createBody = function() {
@@ -48,16 +53,22 @@
 
   Arrow.prototype.draw = function() {
     ctx.save();
-    ctx.translate(this.pX, this.pY);
-    ctx.fillStyle = 'red';
 
-    ctx.beginPath();
-    ctx.moveTo(this.pVerts[0][0], this.pVerts[0][1]);
-    ctx.lineTo(this.pVerts[1][0], this.pVerts[1][1]);
-    ctx.lineTo(this.pVerts[2][0], this.pVerts[2][1]);
-    ctx.lineTo(this.pVerts[3][0], this.pVerts[3][1]);
-    ctx.closePath();
-    ctx.fill();
+    if (!this.image) {
+      ctx.translate(this.pX, this.pY);
+      ctx.fillStyle = 'red';
+
+      ctx.beginPath();
+      ctx.moveTo(this.pVerts[0][0], this.pVerts[0][1]);
+      ctx.lineTo(this.pVerts[1][0], this.pVerts[1][1]);
+      ctx.lineTo(this.pVerts[2][0], this.pVerts[2][1]);
+      ctx.lineTo(this.pVerts[3][0], this.pVerts[3][1]);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      ctx.drawImage(this.image, this.pX - this.image.width * 0.65, this.pY - this.image.height * 0.5);
+    }
+
     ctx.restore();
   };
 

@@ -53,7 +53,7 @@
   };
 
   Wheel.prototype.getScore = function() {
-    var currentRotation = wheel.body.angle % (Math.PI * 2);
+    var currentRotation = this.body.angle % (Math.PI * 2);
     //currentRotation += this.deltaPI / 2; // offset
     if (currentRotation < 0) {
       currentRotation += Math.PI * 2; // positive value

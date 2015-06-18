@@ -12,9 +12,19 @@
   <section id="menu">
     <div id="menu_button"><img src="images/ic_menu_48px.svg"></div>
 
-    <section id="player">
+    <section id="config">
       <label for="player_name">Player Name</label>
       <input id="player_name" type="text" class="validate">
+
+      <section id="wheel_config">
+        <label for="wheel_damping">Wheel Damping</label>
+        <input type="range" id="wheel_damping" min="0" max="1" step="0.05" value="0.2">
+        <label id="wheel_damping_label" class="range_number">0.20</label>
+
+        <label for="wheel_velocity">Wheel Velocity</label>
+        <input type="range" id="wheel_velocity" min="0" max="50" value="20">
+        <label id="wheel_velocity_label" class="range_number">20</label>
+      </section>
     </section>
 
     <section id= "planets" class="collection">

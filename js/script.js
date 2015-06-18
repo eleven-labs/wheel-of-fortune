@@ -19,6 +19,9 @@
   var mouseConstraint = null;
   var playerName = null;
 
+  //adapt angularVelocity to tend toward 20
+  var targetSpeed = 20;
+
   function getPhysicsCoord(e) {
     var rect = drawingCanvas.getBoundingClientRect();
     var clientX = e.clientX || e.touches[0].clientX;
@@ -73,13 +76,10 @@
       return;
     }
 
-    //adapt angularVelocity to tend toward 16
-    var targetSpeed = 20;
-
     targetSpeed = wheel.body.angularVelocity > 0 ? targetSpeed : -targetSpeed;
     var velocity = wheel.body.angularVelocity;
     var diff = targetSpeed - velocity;
-    wheel.body.angularVelocity = velocity + diff * 2;
+    wheel.body.angularVelocity = velocity + diff;
     console.log('initial velocity : ' + velocity + ' adapted to ' + wheel.body.angularVelocity);
 
     wheelSpinning = true;
@@ -212,7 +212,7 @@
     wheel.body.angularVelocity = 0;
     wheel.initAssets();
 
-    arrow = new Arrow(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h);
+    arrow = new Arrow(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h, config.arrow.image);
     mouseBody = new p2.Body();
 
     world.addBody(mouseBody);
@@ -274,6 +274,7 @@
     initPhysics();
     requestAnimationFrame(loop);
 
+    // menu button
     var menuButton = document.getElementById('menu_button');
     var menu = document.getElementById('menu');
 
@@ -281,12 +282,14 @@
       menu.classList.toggle('active');
     });
 
+    //Player Name
     var playerNameInput = document.getElementById('player_name');
 
     playerNameInput.addEventListener('change', function(e) {
       playerName = e.target.value || null;
     });
 
+    //Reinitialize after displaying result
     resultPanel.addEventListener('click', function() {
       this.classList.remove('active');
       var l = this.children.length;
@@ -299,6 +302,7 @@
       statusLabel.innerHTML = '';
     });
 
+    // Menu Switches
     var menuSwitches = document.querySelectorAll('.switch input');
     var l = menuSwitches.length;
 
@@ -306,10 +310,28 @@
       menuSwitches[i].addEventListener('change', onSwitchChange);
     }
 
+    // Menu force buttons
     l = menuForces.length;
 
     for (var j = 0; j < l; j++) {
       menuForces[j].addEventListener('change', onForceChange);
     }
+
+    // Wheel Damping
+    var wheelDamping = document.getElementById('wheel_damping');
+    var wheelDampingLabel =  document.getElementById('wheel_damping_label');
+    wheelDamping.addEventListener('change', function(e) {
+      wheelDampingLabel.innerText = e.target.value;
+      wheel.body.angularDamping = parseFloat(e.target.value);
+      console.log(wheel.body.angularDamping);
+    });
+
+    // Wheel Velocity
+    var wheelVelocity = document.getElementById('wheel_velocity');
+    var wheelVelocityLabel =  document.getElementById('wheel_velocity_label');
+    wheelVelocity.addEventListener('change', function(e) {
+      wheelVelocityLabel.innerText = e.target.value;
+      targetSpeed = parseInt(e.target.value);
+    });
   };
 })();
