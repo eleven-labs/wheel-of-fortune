@@ -67,25 +67,25 @@
         label: 'raccoonsofasgard',
         name: 'Raccoons of Asgard',
         icon: 'images/raccoon-icon.png',
-        color: '#FECB00',
+        color: '#FCC425',
         id: 0
       }, {
         label: 'schizocats',
         name: 'Schizo Cats',
         icon: 'images/schizo-icon.png',
-        color: '#014991',
+        color: '#4F6A82',
         id: 1
       }, {
         label: 'duckinvaders',
         name: 'Duck Invaders',
         icon: 'images/duck-icon.png',
-        color: '#46CD4D',
+        color: '#4EA33B',
         id: 2
       }, {
         label: 'donutfactory',
         name: 'Donut Factory',
         icon: 'images/donut-icon.png',
-        color: '#D50B01',
+        color: '#CE141A',
         id: 3
       }],
     };

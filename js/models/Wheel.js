@@ -17,7 +17,7 @@
     this.x = x;
     this.y = y;
     this.pX = this.x * config.physics.ppm;
-    this.pY = config.physics.physicsHeight * 0.5 * config.physics.ppm;
+    this.pY = config.physics.physicsHeight * 0.61 * config.physics.ppm;
 
     this.radius = radius;
     this.pRadius = this.radius * config.physics.ppm;
