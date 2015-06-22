@@ -18,6 +18,8 @@
   var mouseBody = null;
   var mouseConstraint = null;
   var playerName = null;
+  var forcedPlanet = null;
+  var segmentPercent = null;
 
   //adapt angularVelocity to tend toward 20
   var targetSpeed = 20;
@@ -100,7 +102,7 @@
     }
   }
 
-  function update() {
+  function updatePosition() {
     var particlesLength = particles.length;
 
     for (var i = 0; i < particlesLength; i++) {
@@ -122,33 +124,74 @@
 
     arrow.updatePosition(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h);
     wheel.updatePosition(config.wheel.x, config.wheel.y, config.wheel.radius);
+  }
 
-    if (!wheelSpinning || wheelStopped || Math.abs(wheel.body.angularVelocity) >= 0.05) {
-      return;
-    }
-
+  function handleRotationEnding(currentPlanet) {
     wheelStopped = true;
     wheelSpinning = false;
     wheel.sound.pause();
     wheel.soundFound.play();
 
     wheel.body.angularVelocity = 0;
-    var win = wheel.segments[wheel.getScore()];
 
-    if (win) {
-      spawnPartices();
-      statusLabel.innerHTML = resultTemplate({
-        planetName: win.name,
-        playerName: playerName,
-      });
-      statusLabel.classList.toggle('active');
-
-      var img = _.find(resultPanel.children, {
-        id: 'blaze-' + win.id
-      });
-      img.classList.toggle('active');
-      resultPanel.classList.toggle('active');
+    if (!currentPlanet) {
+      return;
     }
+
+    spawnPartices();
+
+    statusLabel.innerHTML = resultTemplate({
+      planetName: currentPlanet.name,
+      playerName: playerName,
+    });
+    statusLabel.classList.toggle('active');
+
+    var img = _.find(resultPanel.children, {
+      id: 'blaze-' + currentPlanet.id
+    });
+    img.classList.toggle('active');
+
+    resultPanel.classList.toggle('active');
+  }
+
+  function update() {
+    updatePosition();
+
+    var angularVelocity = wheel.body.angularVelocity;
+    var clockwiseRotation = angularVelocity > 0;
+    var minVelocity = forcedPlanet ? 0.2 : 0.05;
+
+    if (!wheelSpinning || wheelStopped || Math.abs(angularVelocity) >= minVelocity) {
+      return;
+    }
+
+    var score = wheel.getScore();
+    var currentPlanet = wheel.segments[score];
+
+    if (!forcedPlanet) {
+      return handleRotationEnding(currentPlanet);
+    }
+
+    if (currentPlanet.id !== forcedPlanet.id) {
+      wheel.body.angularVelocity = clockwiseRotation ? minVelocity : -minVelocity;
+      return;
+    }
+
+    var currentSegmentPercent = clockwiseRotation ? wheel.getSegmentPercent(score) : 1 - wheel.getSegmentPercent(score);
+
+    if (!segmentPercent) {
+      segmentPercent = Math.random();
+    }
+
+    if (currentSegmentPercent < segmentPercent) {
+      var newVelocity = minVelocity * (1 - currentSegmentPercent / segmentPercent);
+      newVelocity = newVelocity > 0.05 ? newVelocity : 0.05;
+      wheel.body.angularVelocity = clockwiseRotation ? newVelocity : -newVelocity;
+      return;
+    }
+
+    segmentPercent = null;
+    handleRotationEnding(currentPlanet);
   }
 
   function draw() {
@@ -258,9 +301,13 @@
         disabledInputs[i].setAttribute('disabled', 'disabled');
       }
 
+      forcedPlanet = _.find(planets, {
+        id: parseInt(_.last(e.target.id))
+      });
       return;
     }
 
+    forcedPlanet = null;
     var l = menuForces.length;
 
     for (var j = 0; j < l; j++) {
@@ -319,7 +366,7 @@
 
     // Wheel Damping
     var wheelDamping = document.getElementById('wheel_damping');
-    var wheelDampingLabel =  document.getElementById('wheel_damping_label');
+    var wheelDampingLabel = document.getElementById('wheel_damping_label');
     wheelDamping.addEventListener('change', function(e) {
       wheelDampingLabel.innerText = e.target.value;
       wheel.body.angularDamping = parseFloat(e.target.value);
@@ -328,7 +375,7 @@
 
     // Wheel Velocity
     var wheelVelocity = document.getElementById('wheel_velocity');
-    var wheelVelocityLabel =  document.getElementById('wheel_velocity_label');
+    var wheelVelocityLabel = document.getElementById('wheel_velocity_label');
     wheelVelocity.addEventListener('change', function(e) {
       wheelVelocityLabel.innerText = e.target.value;
       targetSpeed = parseInt(e.target.value);

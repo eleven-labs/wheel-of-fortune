@@ -52,14 +52,23 @@
     world.addConstraint(this.constraint);
   };
 
-  Wheel.prototype.getScore = function() {
-    var currentRotation = this.body.angle % (Math.PI * 2);
-    //currentRotation += this.deltaPI / 2; // offset
-    if (currentRotation < 0) {
-      currentRotation += Math.PI * 2; // positive value
+  Wheel.prototype.getNormalizeAngle = function() {
+    var angle = this.body.angle % (Math.PI * 2);
+
+    if (angle < 0) {
+      angle += Math.PI * 2; // positive value
     }
 
-    return Math.floor(currentRotation / this.deltaPI);
+    return angle;
+  };
+
+  Wheel.prototype.getScore = function() {
+    return Math.floor(this.getNormalizeAngle() / this.deltaPI);
+  };
+
+  Wheel.prototype.getSegmentPercent = function(score) {
+    var progress = this.getNormalizeAngle() - score * this.deltaPI;
+    return progress / this.deltaPI;
   };
 
   Wheel.prototype.draw = function() {
