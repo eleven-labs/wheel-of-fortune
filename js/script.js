@@ -74,14 +74,13 @@
       return;
     }
 
-    if (Math.abs(wheel.body.angularVelocity) <= 5) {
+    var velocity = wheel.body.angularVelocity;
+
+    if (Math.abs(velocity) <= 5) {
       return;
     }
 
-    targetSpeed = wheel.body.angularVelocity > 0 ? targetSpeed : -targetSpeed;
-    var velocity = wheel.body.angularVelocity;
-    var diff = targetSpeed - velocity;
-    wheel.body.angularVelocity = velocity + diff;
+    wheel.body.angularVelocity = (velocity > 0 ? targetSpeed : -targetSpeed);
     console.log('initial velocity : ' + velocity + ' adapted to ' + wheel.body.angularVelocity);
 
     wheelSpinning = true;
