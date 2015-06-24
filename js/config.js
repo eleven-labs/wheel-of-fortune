@@ -46,7 +46,7 @@
         y: wheelY,
         w: wheelRadius * 0.1875,
         h: wheelRadius * 0.0625,
-        image: 'images/rocket-arrow-2.png',
+        image: 'images/rocket-arrow.png',
       },
 
       sounds: {
