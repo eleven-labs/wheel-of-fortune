@@ -59,8 +59,8 @@
       },
 
       wording: {
-        tooSlow: 'C\'était mou ! Essaie encore.',
-        result: 'Bienvenue chez les<br/><%= planetName %> !<br/>Félicitation <%= playerName ? playerName + " " : "" %>!',
+        tooSlow: 'Harder. Better. Faster. Stronger ?',
+        result: 'You\'re an official member of Planet <br/><span><%= planetName %> !</span><br/>Welcome Home <%= playerName ? playerName + " " : "" %>!',
       },
 
       planets: [{

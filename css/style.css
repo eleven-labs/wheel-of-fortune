@@ -40,7 +40,6 @@ body {
   font-size: 20px;
   text-align: center;
   pointer-events: none;
-  font-weight: bolder;
   text-transform: uppercase;
   text-shadow: 0 0 5px black;
   transition: all 2s;
@@ -51,6 +50,10 @@ body {
   top: 60%;
   font-size: 40px;
   text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
+}
+
+#status_label span {
+  font-size: 60px;
 }
 
 #result_panel {
