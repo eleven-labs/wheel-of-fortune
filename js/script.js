@@ -47,7 +47,7 @@
         wheelStopped = true;
         wheel.sound.pause();
       }
-      statusLabel.className = '';
+      statusLabel.innerHTML = '';
       mouseConstraint = new p2.RevoluteConstraint(mouseBody, wheel.body, {
         worldPivot: mouseBody.position,
         collideConnected: false
