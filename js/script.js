@@ -9,7 +9,6 @@
   var drawingCanvas = document.getElementById('canvas');
   var statusLabel = document.getElementById('status_label');
   var resultPanel = document.getElementById('result_panel');
-  var menuForces = document.querySelectorAll('.force input');
 
   var particles = [];
   var segments = [];
@@ -18,8 +17,6 @@
   var mouseBody = null;
   var mouseConstraint = null;
   var playerName = null;
-  var forcedPlanet = null;
-  var segmentPercent = null;
 
   //adapt angularVelocity to tend toward 20
   var targetSpeed = 20;
@@ -157,8 +154,7 @@
     updatePosition();
 
     var angularVelocity = wheel.body.angularVelocity;
-    var clockwiseRotation = angularVelocity > 0;
-    var minVelocity = forcedPlanet ? 0.2 : 0.05;
+    var minVelocity = 0.05;
 
     if (!wheelSpinning || wheelStopped || Math.abs(angularVelocity) >= minVelocity) {
       return;
@@ -167,30 +163,7 @@
     var score = wheel.getScore();
     var currentPlanet = wheel.segments[score];
 
-    if (!forcedPlanet) {
-      return handleRotationEnding(currentPlanet);
-    }
-
-    if (currentPlanet.id !== forcedPlanet.id) {
-      wheel.body.angularVelocity = clockwiseRotation ? minVelocity : -minVelocity;
-      return;
-    }
-
-    var currentSegmentPercent = clockwiseRotation ? wheel.getSegmentPercent(score) : 1 - wheel.getSegmentPercent(score);
-
-    if (!segmentPercent) {
-      segmentPercent = Math.random();
-    }
-
-    if (currentSegmentPercent < segmentPercent) {
-      var newVelocity = minVelocity * (1 - currentSegmentPercent / segmentPercent);
-      newVelocity = newVelocity > 0.05 ? newVelocity : 0.05;
-      wheel.body.angularVelocity = clockwiseRotation ? newVelocity : -newVelocity;
-      return;
-    }
-
-    segmentPercent = null;
-    handleRotationEnding(currentPlanet);
+    return handleRotationEnding(currentPlanet);
   }
 
   function draw() {
@@ -289,31 +262,6 @@
     wheel.deltaPI = Math.PI * 2 / wheel.segments.length;
   }
 
-  function onForceChange(e) {
-    if (e.target.checked) {
-      var disabledInputs = _.reject(menuForces, function(menuForce) {
-        return menuForce.id === e.target.id;
-      });
-      var disabledInputsLength = disabledInputs.length;
-
-      for (var i = 0; i < disabledInputsLength; i++) {
-        disabledInputs[i].setAttribute('disabled', 'disabled');
-      }
-
-      forcedPlanet = _.find(planets, {
-        id: parseInt(_.last(e.target.id))
-      });
-      return;
-    }
-
-    forcedPlanet = null;
-    var l = menuForces.length;
-
-    for (var j = 0; j < l; j++) {
-      menuForces[j].removeAttribute('disabled');
-    }
-  }
-
   window.onload = function() {
     initSegments();
     initDrawingCanvas();
@@ -354,13 +302,6 @@
 
     for (var i = 0; i < l; i++) {
       menuSwitches[i].addEventListener('change', onSwitchChange);
-    }
-
-    // Menu force buttons
-    l = menuForces.length;
-
-    for (var j = 0; j < l; j++) {
-      menuForces[j].addEventListener('change', onForceChange);
     }
 
     // Wheel Damping
