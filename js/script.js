@@ -23,8 +23,8 @@
 
   function getPhysicsCoord(e) {
     var rect = drawingCanvas.getBoundingClientRect();
-    var clientX = e.clientX || e.touches[0].clientX;
-    var clientY = e.clientY || e.touches[0].clientY;
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
     var x = (clientX - rect.left) / physics.ppm;
     var y = physics.physicsHeight - (clientY - rect.top) / physics.ppm;
     return {
