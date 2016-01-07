@@ -1,6 +1,18 @@
 (function() {
   'use strict';
 
+  function darken(hexColor, percent) {
+    var darkenedColor = '#';
+    for (var i = 1; i <= 5; i += 2) {
+      var colorComponent = Math.round(parseInt(hexColor.substr(i, 2), 16) / (1 + percent)).toString(16);
+      if (colorComponent.length === 1) {
+        colorComponent = '0' + colorComponent;
+      }
+      darkenedColor += colorComponent;
+    }
+    return darkenedColor;
+  }
+
   function getPlanets() {
       var planets = [{
         label: 'raccoonsofasgard',
@@ -33,13 +45,7 @@
           if (!planet.additionalWeight) {
             planet.additionalWeight = 0;
           }
-          var r = Math.round(parseInt(planet.color.substr(1, 2), 16) / 1.10).toString(16);
-          var g = Math.round(parseInt(planet.color.substr(3, 2), 16) / 1.10).toString(16);
-          var b = Math.round(parseInt(planet.color.substr(5, 2), 16) / 1.10).toString(16);
-          if (r.length === 1) { r = '0' + r; }
-          if (g.length === 1) { g = '0' + g; }
-          if (b.length === 1) { b = '0' + b; }
-          planet.secondaryColor = '#' + r + g + b;
+          planet.secondaryColor = darken(planet.color, 0.30);
       });
       return planets;
   }

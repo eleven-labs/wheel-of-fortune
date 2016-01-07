@@ -248,8 +248,8 @@
   }
 
   function onSwitchChange() {
-      initSegments(getActivePlanets());
-      wheel.segments = segments;
+    initSegments(getActivePlanets());
+    wheel.segments = segments;
     wheel.updateSegmentsPosition();
   }
 
@@ -257,6 +257,7 @@
     initSegments(getActivePlanets());
     initDrawingCanvas();
     initPhysics();
+    wheel.updateSegmentsPosition();
     requestAnimationFrame(loop);
 
     // menu button

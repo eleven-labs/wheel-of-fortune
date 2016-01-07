@@ -8,7 +8,6 @@
   function Wheel(x, y, radius, segments) {
     this.updatePosition(x, y, radius);
     this.segments = segments;
-    this.deltaPI = Math.PI * 2 / this.segments.length;
 
     this.createBody();
   }
@@ -63,12 +62,12 @@
   };
 
   Wheel.prototype.getScore = function() {
-    return Math.floor(this.getNormalizeAngle() / this.deltaPI);
-  };
-
-  Wheel.prototype.getSegmentPercent = function(score) {
-    var progress = this.getNormalizeAngle() - score * this.deltaPI;
-    return progress / this.deltaPI;
+    var angle = this.getNormalizeAngle();
+    for (var i = 0; i < this.segments.length; ++i) {
+      if (angle >= this.segments[i].start && angle < this.segments[i].start + this.segments[i].size) {
+        return i;
+      }
+    }
   };
 
   Wheel.prototype.draw = function() {
