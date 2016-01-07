@@ -247,23 +247,14 @@
     return result;
   }
 
-  function onSwitchChange(e) {
-    // debugger;
-    if (e.target.checked) {
+  function onSwitchChange() {
       initSegments(getActivePlanets());
       wheel.segments = segments;
-    } else {
-      var planet = parseInt(e.target.getAttribute('data-planet'));
-      _.remove(wheel.segments, function(currentObject) {
-        return currentObject.id === planet;
-      });
-    }
-
-    wheel.deltaPI = Math.PI * 2 / wheel.segments.length;
+    wheel.updateSegmentsPosition();
   }
 
   window.onload = function() {
-    initSegments();
+    initSegments(getActivePlanets());
     initDrawingCanvas();
     initPhysics();
     requestAnimationFrame(loop);

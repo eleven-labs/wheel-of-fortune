@@ -1,6 +1,49 @@
 (function() {
   'use strict';
 
+  function getPlanets() {
+      var planets = [{
+        label: 'raccoonsofasgard',
+        name: 'Raccoons of Asgard',
+        icon: 'images/raccoon-icon.png',
+        color: '#FCC425',
+        additionalWeight: 1/2,
+      }, {
+        label: 'schizocats',
+        name: 'Schizo Cats',
+        icon: 'images/schizo-icon.png',
+        color: '#4F6A82',
+        additionalWeight: 1/4,
+      }, {
+        label: 'duckinvaders',
+        name: 'Duck Invaders',
+        icon: 'images/duck-icon.png',
+        color: '#4EA33B',
+        additionalWeight: 1/10,
+      }, {
+        label: 'donutfactory',
+        name: 'Donut Factory',
+        icon: 'images/donut-icon.png',
+        color: '#CE141A',
+        additionalWeight: 1,
+      }];
+
+      planets.forEach(function(planet, index) {
+          planet.id = index;
+          if (!planet.additionalWeight) {
+            planet.additionalWeight = 0;
+          }
+          var r = Math.round(parseInt(planet.color.substr(1, 2), 16) / 1.10).toString(16);
+          var g = Math.round(parseInt(planet.color.substr(3, 2), 16) / 1.10).toString(16);
+          var b = Math.round(parseInt(planet.color.substr(5, 2), 16) / 1.10).toString(16);
+          if (r.length === 1) { r = '0' + r; }
+          if (g.length === 1) { g = '0' + g; }
+          if (b.length === 1) { b = '0' + b; }
+          planet.secondaryColor = '#' + r + g + b;
+      });
+      return planets;
+  }
+
   function getUpdatedConfig() {
     var viewWidth = window.innerWidth;
     var viewHeight = window.innerHeight;
@@ -63,31 +106,7 @@
         result: 'You\'re an official member of Planet <br/><span><%= planetName %> !</span><br/>Welcome Home <%= playerName ? playerName + " " : "" %>!',
       },
 
-      planets: [{
-        label: 'raccoonsofasgard',
-        name: 'Raccoons of Asgard',
-        icon: 'images/raccoon-icon.png',
-        color: '#FCC425',
-        id: 0
-      }, {
-        label: 'schizocats',
-        name: 'Schizo Cats',
-        icon: 'images/schizo-icon.png',
-        color: '#4F6A82',
-        id: 1
-      }, {
-        label: 'duckinvaders',
-        name: 'Duck Invaders',
-        icon: 'images/duck-icon.png',
-        color: '#4EA33B',
-        id: 2
-      }, {
-        label: 'donutfactory',
-        name: 'Donut Factory',
-        icon: 'images/donut-icon.png',
-        color: '#CE141A',
-        id: 3
-      }],
+      planets: getPlanets(),
     };
   }
 
