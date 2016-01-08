@@ -19,32 +19,26 @@
         name: 'Raccoons of Asgard',
         icon: 'images/raccoon-icon.png',
         color: '#FCC425',
-        additionalWeight: 1/2,
       }, {
         label: 'schizocats',
         name: 'Schizo Cats',
         icon: 'images/schizo-icon.png',
         color: '#4F6A82',
-        additionalWeight: 1/4,
       }, {
         label: 'duckinvaders',
         name: 'Duck Invaders',
         icon: 'images/duck-icon.png',
         color: '#4EA33B',
-        additionalWeight: 1/10,
       }, {
         label: 'donutfactory',
         name: 'Donut Factory',
         icon: 'images/donut-icon.png',
         color: '#CE141A',
-        additionalWeight: 1,
       }];
 
       planets.forEach(function(planet, index) {
           planet.id = index;
-          if (!planet.additionalWeight) {
-            planet.additionalWeight = 0;
-          }
+          planet.additionalWeight = 0;
           planet.secondaryColor = darken(planet.color, 0.30);
       });
       return planets;

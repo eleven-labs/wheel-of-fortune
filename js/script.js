@@ -247,7 +247,7 @@
     return result;
   }
 
-  function onSwitchChange() {
+  function reloadSegments() {
     initSegments(getActivePlanets());
     wheel.segments = segments;
     wheel.updateSegmentsPosition();
@@ -293,24 +293,29 @@
     var l = menuSwitches.length;
 
     for (var i = 0; i < l; i++) {
-      menuSwitches[i].addEventListener('change', onSwitchChange);
+      menuSwitches[i].addEventListener('change', reloadSegments);
     }
 
-    // Wheel Damping
-    var wheelDamping = document.getElementById('wheel_damping');
-    var wheelDampingLabel = document.getElementById('wheel_damping_label');
-    wheelDamping.addEventListener('change', function(e) {
-      wheelDampingLabel.innerText = e.target.value;
-      wheel.body.angularDamping = parseFloat(e.target.value);
-      console.log(wheel.body.angularDamping);
-    });
-
-    // Wheel Velocity
-    var wheelVelocity = document.getElementById('wheel_velocity');
-    var wheelVelocityLabel = document.getElementById('wheel_velocity_label');
-    wheelVelocity.addEventListener('change', function(e) {
-      wheelVelocityLabel.innerText = e.target.value;
-      targetSpeed = parseInt(e.target.value);
+    var ranges = [{
+      input: '#wheel_damping', onchange: function(e) { wheel.body.angularDamping = parseFloat(e.target.value); }
+    }, {
+      input: '#wheel_velocity', onchange: function(e) { targetSpeed = parseInt(e.target.value); }
+    }, {
+      input: '.bribe input', onchange: function(e) {
+        var planetIndex = e.target.getAttribute('data-planet');
+        planets[planetIndex].additionalWeight = parseInt(e.target.value) / 100;
+        reloadSegments();
+      }
+    }];
+    ranges.forEach(function(range) {
+      var inputs = document.querySelectorAll(range.input);
+      Array.prototype.forEach.call(inputs, function(input) {
+        var label = input.nextElementSibling;
+        input.addEventListener('input', function(e) {
+          label.innerText = e.target.value;
+        });
+        input.addEventListener('change', range.onchange);
+      });
     });
   };
 })();
