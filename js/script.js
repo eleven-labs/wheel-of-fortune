@@ -222,7 +222,7 @@
     world.solver.iterations = 100;
     world.solver.tolerance = 0;
 
-    wheel = new Wheel(config.wheel.x, config.wheel.y, config.wheel.radius, segments, 0.25, 7.5);
+    wheel = new Wheel(config.wheel.x, config.wheel.y, config.wheel.radius, segments);
     wheel.body.angle = 0;
     wheel.body.angularVelocity = 0;
     wheel.initAssets();
@@ -297,8 +297,6 @@
     }
 
     var ranges = [{
-      input: '#wheel_damping', onchange: function(e) { wheel.body.angularDamping = parseFloat(e.target.value); }
-    }, {
       input: '#wheel_velocity', onchange: function(e) { targetSpeed = parseInt(e.target.value); }
     }, {
       input: '.bribe input', onchange: function(e) {
