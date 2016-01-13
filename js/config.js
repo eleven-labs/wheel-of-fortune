@@ -91,6 +91,13 @@
         image: 'images/rocket-arrow.png',
       },
 
+      pushButton: {
+        x: wheelX + wheelRadius,
+        y: wheelY - wheelRadius,
+        radius: wheelRadius / 5,
+        image: 'images/big-red-button.png',
+      },
+
       sounds: {
         wheelSpin: 'http://bramp.net/javascript/wheel.mp3',
         wheelFound: 'sounds/result.mp3',
@@ -113,5 +120,6 @@
   window.ctx = null;
   window.wheel = null;
   window.arrow = null;
+  window.pushButton = null;
   window.world = null;
 })();

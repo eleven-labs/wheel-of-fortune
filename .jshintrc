@@ -97,9 +97,11 @@
         "Particle"    : true,
         "Point"       : true,
         "Item"        : true,
+        "CircularButton": true,
         "world"       : true,
         "wheel"       : true,
         "arrow"       : true,
+        "pushButton"  : true,
         "ctx"         : true
     }        // additional predefined global variables
 }

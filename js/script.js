@@ -17,9 +17,8 @@
   var mouseBody = null;
   var mouseConstraint = null;
   var playerName = null;
-
-  //adapt angularVelocity to tend toward 20
-  var targetSpeed = 20;
+  var minVelocity = 10;
+  var maxVelocity = 25;
 
   function getPhysicsCoord(e) {
     var rect = drawingCanvas.getBoundingClientRect();
@@ -40,7 +39,16 @@
   }
 
   function checkStartDrag() {
-
+    if (world.hitTest(mouseBody.position, [pushButton.body])[0]) {
+      if (wheelSpinning === true) {
+        wheel.body.angularVelocity = 0;
+        wheelSpinning = false;
+        wheelStopped = true;
+        wheel.sound.pause();
+      }
+      statusLabel.innerHTML = '';
+      pushButton.press();
+    }
     if (world.hitTest(mouseBody.position, [wheel.body])[0]) {
       if (wheelSpinning === true) {
         wheelSpinning = false;
@@ -58,7 +66,10 @@
   }
 
   function checkEndDrag() {
-    if (!mouseConstraint) {
+    if (pushButton.states.pressed) {
+      var pressForce = pushButton.release();
+      wheel.body.angularVelocity = minVelocity + pressForce * (maxVelocity - minVelocity);
+    } else if (!mouseConstraint) {
       return;
     }
 
@@ -71,14 +82,21 @@
       return;
     }
 
-    var velocity = wheel.body.angularVelocity;
+    var velocity = Math.abs(wheel.body.angularVelocity);
+    var direction = Math.sign(wheel.body.angularVelocity);
 
-    if (Math.abs(velocity) <= 5) {
+    if (velocity <= 5) {
       return;
     }
+    if (velocity < minVelocity) {
+      velocity = minVelocity;
+    }
+    if (velocity > maxVelocity) {
+      velocity = maxVelocity;
+    }
 
-    wheel.body.angularVelocity = (velocity > 0 ? targetSpeed : -targetSpeed);
-    console.log('initial velocity : ' + velocity + ' adapted to ' + wheel.body.angularVelocity);
+    console.log('initial velocity : ' + wheel.body.angularVelocity + ' adapted to ' + velocity * direction);
+    wheel.body.angularVelocity = velocity * direction;
 
     wheelSpinning = true;
     wheelStopped = false;
@@ -119,6 +137,7 @@
     drawingCanvas.height = canvas.viewHeight;
 
     arrow.updatePosition(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h);
+    pushButton.updatePosition(config.pushButton.x, config.pushButton.y, config.pushButton.radius);
     wheel.updatePosition(config.wheel.x, config.wheel.y, config.wheel.radius);
   }
 
@@ -171,6 +190,7 @@
 
     wheel.draw();
     arrow.draw();
+    pushButton.draw();
 
     var particlesLength = particles.length;
 
@@ -228,6 +248,7 @@
     wheel.initAssets();
 
     arrow = new Item(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h, config.arrow.image);
+    pushButton = new CircularButton(config.pushButton.x, config.pushButton.y, config.pushButton.radius, config.pushButton.image);
     mouseBody = new p2.Body();
 
     world.addBody(mouseBody);
@@ -297,7 +318,7 @@
     }
 
     var ranges = [{
-      input: '#wheel_velocity', onchange: function(e) { targetSpeed = parseInt(e.target.value); }
+      input: '#wheel_velocity', onchange: function(e) { minVelocity = parseInt(e.target.value); }
     }, {
       input: '.bribe input', onchange: function(e) {
         var planetIndex = e.target.getAttribute('data-planet');
