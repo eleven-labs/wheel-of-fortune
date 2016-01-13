@@ -127,8 +127,12 @@ body {
   padding-right: 20px;
 }
 
-#wheel_config input {
+#menu input[type=range] {
   width: 90%;
+}
+
+#planets .bribe label + input {
+  width: 70%
 }
 
 .range_number {
@@ -137,10 +141,4 @@ body {
 
 .collection {
   margin: 0;
-}
-
-.force {
-  position: relative;
-  top: -22px;
-  left: 70%;
 }

@@ -8,7 +8,6 @@
   function Wheel(x, y, radius, segments) {
     this.updatePosition(x, y, radius);
     this.segments = segments;
-    this.deltaPI = Math.PI * 2 / this.segments.length;
 
     this.createBody();
   }
@@ -63,12 +62,12 @@
   };
 
   Wheel.prototype.getScore = function() {
-    return Math.floor(this.getNormalizeAngle() / this.deltaPI);
-  };
-
-  Wheel.prototype.getSegmentPercent = function(score) {
-    var progress = this.getNormalizeAngle() - score * this.deltaPI;
-    return progress / this.deltaPI;
+    var angle = this.getNormalizeAngle();
+    for (var i = 0; i < this.segments.length; ++i) {
+      if (angle >= this.segments[i].start && angle < this.segments[i].start + this.segments[i].size) {
+        return i;
+      }
+    }
   };
 
   Wheel.prototype.draw = function() {
@@ -89,16 +88,27 @@
   };
 
   Wheel.prototype.drawSegments = function() {
+    this.updateSegmentsPosition();
     var l = this.segments.length;
 
-    for (var i = 0; i < l; i++) {
-      ctx.fillStyle = this.segments[i].color;
+    this.segments.forEach(function(segment) {
+      var start = segment.start;
+      var size = segment.size;
+      var end = start + size;
+      ctx.fillStyle = segment.color;
       ctx.beginPath();
-      ctx.arc(0, 0, this.pRadius, i * this.deltaPI, (i + 1) * this.deltaPI);
+      ctx.arc(0, 0, this.pRadius, start, end);
       ctx.lineTo(0, 0);
       ctx.closePath();
       ctx.fill();
-    }
+
+      ctx.fillStyle = segment.secondaryColor;
+      ctx.beginPath();
+      ctx.arc(0, 0, this.pRadius, end - segment.bonusSize, end);
+      ctx.lineTo(0, 0);
+      ctx.closePath();
+      ctx.fill();
+    }.bind(this));
 
     var minImageY = this.pRadius * 0.4;
     var maxHeight = this.pRadius * 0.5 * 0.7;
@@ -108,7 +118,7 @@
 
       ctx.save();
       ctx.rotate(-Math.PI * 0.5);
-      ctx.rotate(j * this.deltaPI + this.deltaPI / 2);
+      ctx.rotate(this.segments[j].start + this.segments[j].size / 2);
 
       var image = this.img[segmentLabel] ? this.img[segmentLabel] : this.img.default;
       var height = maxHeight;
@@ -151,6 +161,23 @@
         this.img[segmentLabel].src = segmentIcon;
       }
     }
+  };
+
+  Wheel.prototype.updateSegmentsPosition = function() {
+    var additionalWeight = this.segments.reduce(function(additionalWeight, segment) {
+      return additionalWeight + segment.additionalWeight;
+    }, 0);
+    var baseSize = Math.PI * 2 / this.segments.length;
+    var sizeRatio = 1 + additionalWeight / this.segments.length;
+    var startPos = 0;
+    this.segments = this.segments.map(function(segment) {
+      var newSegment = _.clone(segment);
+      newSegment.start = startPos;
+      newSegment.size = baseSize * (1 + newSegment.additionalWeight) / sizeRatio;
+      newSegment.bonusSize = newSegment.size - newSegment.size / (1 + newSegment.additionalWeight);
+      startPos += newSegment.size;
+      return newSegment;
+    });
   };
 
   window.Wheel = Wheel;

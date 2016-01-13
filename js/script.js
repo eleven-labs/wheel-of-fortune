@@ -9,7 +9,6 @@
   var drawingCanvas = document.getElementById('canvas');
   var statusLabel = document.getElementById('status_label');
   var resultPanel = document.getElementById('result_panel');
-  var menuForces = document.querySelectorAll('.force input');
 
   var particles = [];
   var segments = [];
@@ -18,16 +17,14 @@
   var mouseBody = null;
   var mouseConstraint = null;
   var playerName = null;
-  var forcedPlanet = null;
-  var segmentPercent = null;
 
   //adapt angularVelocity to tend toward 20
   var targetSpeed = 20;
 
   function getPhysicsCoord(e) {
     var rect = drawingCanvas.getBoundingClientRect();
-    var clientX = e.clientX || e.touches[0].clientX;
-    var clientY = e.clientY || e.touches[0].clientY;
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
     var x = (clientX - rect.left) / physics.ppm;
     var y = physics.physicsHeight - (clientY - rect.top) / physics.ppm;
     return {
@@ -50,7 +47,7 @@
         wheelStopped = true;
         wheel.sound.pause();
       }
-      statusLabel.className = '';
+      statusLabel.innerHTML = '';
       mouseConstraint = new p2.RevoluteConstraint(mouseBody, wheel.body, {
         worldPivot: mouseBody.position,
         collideConnected: false
@@ -157,8 +154,7 @@
     updatePosition();
 
     var angularVelocity = wheel.body.angularVelocity;
-    var clockwiseRotation = angularVelocity > 0;
-    var minVelocity = forcedPlanet ? 0.2 : 0.05;
+    var minVelocity = 0.05;
 
     if (!wheelSpinning || wheelStopped || Math.abs(angularVelocity) >= minVelocity) {
       return;
@@ -167,30 +163,7 @@
     var score = wheel.getScore();
     var currentPlanet = wheel.segments[score];
 
-    if (!forcedPlanet) {
-      return handleRotationEnding(currentPlanet);
-    }
-
-    if (currentPlanet.id !== forcedPlanet.id) {
-      wheel.body.angularVelocity = clockwiseRotation ? minVelocity : -minVelocity;
-      return;
-    }
-
-    var currentSegmentPercent = clockwiseRotation ? wheel.getSegmentPercent(score) : 1 - wheel.getSegmentPercent(score);
-
-    if (!segmentPercent) {
-      segmentPercent = Math.random();
-    }
-
-    if (currentSegmentPercent < segmentPercent) {
-      var newVelocity = minVelocity * (1 - currentSegmentPercent / segmentPercent);
-      newVelocity = newVelocity > 0.05 ? newVelocity : 0.05;
-      wheel.body.angularVelocity = clockwiseRotation ? newVelocity : -newVelocity;
-      return;
-    }
-
-    segmentPercent = null;
-    handleRotationEnding(currentPlanet);
+    return handleRotationEnding(currentPlanet);
   }
 
   function draw() {
@@ -249,7 +222,7 @@
     world.solver.iterations = 100;
     world.solver.tolerance = 0;
 
-    wheel = new Wheel(config.wheel.x, config.wheel.y, config.wheel.radius, segments, 0.25, 7.5);
+    wheel = new Wheel(config.wheel.x, config.wheel.y, config.wheel.radius, segments);
     wheel.body.angle = 0;
     wheel.body.angularVelocity = 0;
     wheel.initAssets();
@@ -274,50 +247,17 @@
     return result;
   }
 
-  function onSwitchChange(e) {
-    // debugger;
-    if (e.target.checked) {
-      initSegments(getActivePlanets());
-      wheel.segments = segments;
-    } else {
-      var planet = parseInt(e.target.getAttribute('data-planet'));
-      _.remove(wheel.segments, function(currentObject) {
-        return currentObject.id === planet;
-      });
-    }
-
-    wheel.deltaPI = Math.PI * 2 / wheel.segments.length;
-  }
-
-  function onForceChange(e) {
-    if (e.target.checked) {
-      var disabledInputs = _.reject(menuForces, function(menuForce) {
-        return menuForce.id === e.target.id;
-      });
-      var disabledInputsLength = disabledInputs.length;
-
-      for (var i = 0; i < disabledInputsLength; i++) {
-        disabledInputs[i].setAttribute('disabled', 'disabled');
-      }
-
-      forcedPlanet = _.find(planets, {
-        id: parseInt(_.last(e.target.id))
-      });
-      return;
-    }
-
-    forcedPlanet = null;
-    var l = menuForces.length;
-
-    for (var j = 0; j < l; j++) {
-      menuForces[j].removeAttribute('disabled');
-    }
+  function reloadSegments() {
+    initSegments(getActivePlanets());
+    wheel.segments = segments;
+    wheel.updateSegmentsPosition();
   }
 
   window.onload = function() {
-    initSegments();
+    initSegments(getActivePlanets());
     initDrawingCanvas();
     initPhysics();
+    wheel.updateSegmentsPosition();
     requestAnimationFrame(loop);
 
     // menu button
@@ -353,31 +293,27 @@
     var l = menuSwitches.length;
 
     for (var i = 0; i < l; i++) {
-      menuSwitches[i].addEventListener('change', onSwitchChange);
+      menuSwitches[i].addEventListener('change', reloadSegments);
     }
 
-    // Menu force buttons
-    l = menuForces.length;
-
-    for (var j = 0; j < l; j++) {
-      menuForces[j].addEventListener('change', onForceChange);
-    }
-
-    // Wheel Damping
-    var wheelDamping = document.getElementById('wheel_damping');
-    var wheelDampingLabel = document.getElementById('wheel_damping_label');
-    wheelDamping.addEventListener('change', function(e) {
-      wheelDampingLabel.innerText = e.target.value;
-      wheel.body.angularDamping = parseFloat(e.target.value);
-      console.log(wheel.body.angularDamping);
-    });
-
-    // Wheel Velocity
-    var wheelVelocity = document.getElementById('wheel_velocity');
-    var wheelVelocityLabel = document.getElementById('wheel_velocity_label');
-    wheelVelocity.addEventListener('change', function(e) {
-      wheelVelocityLabel.innerText = e.target.value;
-      targetSpeed = parseInt(e.target.value);
+    var ranges = [{
+      input: '#wheel_velocity', onchange: function(e) { targetSpeed = parseInt(e.target.value); }
+    }, {
+      input: '.bribe input', onchange: function(e) {
+        var planetIndex = e.target.getAttribute('data-planet');
+        planets[planetIndex].additionalWeight = parseInt(e.target.value) / 100;
+        reloadSegments();
+      }
+    }];
+    ranges.forEach(function(range) {
+      var inputs = document.querySelectorAll(range.input);
+      Array.prototype.forEach.call(inputs, function(input) {
+        var label = input.nextElementSibling;
+        input.addEventListener('input', function(e) {
+          label.innerText = e.target.value;
+        });
+        input.addEventListener('change', range.onchange);
+      });
     });
   };
 })();

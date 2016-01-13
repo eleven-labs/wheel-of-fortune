@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Eleven Labs Wheel of Fortune</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.95.3/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -17,78 +17,78 @@
       <input id="player_name" type="text" class="validate">
 
       <section id="wheel_config">
-        <label for="wheel_damping">Wheel Damping</label>
-        <input type="range" id="wheel_damping" min="0" max="1" step="0.05" value="0.2" disabled="disabled">
-        <label id="wheel_damping_label" class="range_number">0.20</label>
-
         <label for="wheel_velocity">Wheel Velocity</label>
         <input type="range" id="wheel_velocity" min="0" max="50" value="20">
-        <label id="wheel_velocity_label" class="range_number">20</label>
+        <label class="range_number">20</label>
       </section>
     </section>
 
     <section id= "planets" class="collection">
-      <a href="#!" class="collection-item">
+      <a class="collection-item">
         <p>Raccoons of Asgard</p>
         <div class="switch">
           <label>
             Off
-            <input type="checkbox" data-planet="0" checked>
+            <input type="checkbox" checked>
             <span class="lever"></span>
             On
           </label>
         </div>
-        <div class="force">
-          <input type="checkbox" class="filled-in" id="force-planet-0">
-          <label for="force-planet-0">Force</label>
+        <div class="bribe">
+          <label>Bribe amount</label>
+          <input type="range" min="0" max="300" value="0" data-planet="0">
+          <label class="range_number">0</label>
         </div>
       </a>
 
-      <a href="#!" class="collection-item">
+      <a class="collection-item">
         <p>Schizo Cats</p>
         <div class="switch">
           <label>
             Off
-            <input type="checkbox" data-planet="1" checked>
+            <input type="checkbox" checked>
             <span class="lever"></span>
             On
           </label>
         </div>
-        <div class="force">
-          <input type="checkbox" class="filled-in" id="force-planet-1">
-          <label for="force-planet-1">Force</label>
+        <div class="bribe">
+          <label>Bribe amount</label>
+          <input type="range"" min="0" max="300" value="0" data-planet="1">
+          <label class="range_number">0</label>
         </div>
       </a>
 
-      <a href="#!" class="collection-item">
+      <a class="collection-item">
         <p>Duck Invaders</p>
         <div class="switch">
           <label>
             Off
-            <input type="checkbox" data-planet="2" checked>
+            <input type="checkbox" checked>
             <span class="lever"></span>
             On
           </label>
         </div>
-        <div class="force">
-          <input type="checkbox" class="filled-in" id="force-planet-2">
-          <label for="force-planet-2">Force</label>
+        <div class="bribe">
+          <label>Bribe amount</label>
+          <input type="range" min="0" max="300" value="0" data-planet="2">
+          <label class="range_number">0</label>
         </div>
       </a>
 
-      <a href="#!" class="collection-item">
+      <a class="collection-item">
         <p>Donut Factory</p>
         <div class="switch">
           <label>
             Off
-            <input type="checkbox" data-planet="3" checked>
+            <input type="checkbox" checked>
             <span class="lever"></span>
             On
           </label>
         </div>
-        <div class="force">
-          <input type="checkbox" class="filled-in" id="force-planet-3">
-          <label for="force-planet-3">Force</label>
+        <div class="bribe">
+          <label>Bribe amount</label>
+          <input type="range" min="0" max="300" value="0" data-planet="3">
+          <label class="range_number">0</label>
         </div>
       </a>
     </section>
