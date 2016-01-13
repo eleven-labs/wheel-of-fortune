@@ -96,7 +96,7 @@
         "Maths"       : true,
         "Particle"    : true,
         "Point"       : true,
-        "Arrow"       : true,
+        "Item"        : true,
         "world"       : true,
         "wheel"       : true,
         "arrow"       : true,

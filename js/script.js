@@ -227,7 +227,7 @@
     wheel.body.angularVelocity = 0;
     wheel.initAssets();
 
-    arrow = new Arrow(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h, config.arrow.image);
+    arrow = new Item(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h, config.arrow.image);
     mouseBody = new p2.Body();
 
     world.addBody(mouseBody);
