@@ -248,7 +248,7 @@
     wheel.initAssets();
 
     arrow = new Item(config.arrow.x, config.arrow.y, config.arrow.w, config.arrow.h, config.arrow.image);
-    pushButton = new CircularButton(config.pushButton.x, config.pushButton.y, config.pushButton.radius, config.pushButton.image);
+    pushButton = new CircularButton(config.pushButton.x, config.pushButton.y, config.pushButton.radius, config.pushButton.image, 4);
     mouseBody = new p2.Body();
 
     world.addBody(mouseBody);

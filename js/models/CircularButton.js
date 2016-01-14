@@ -5,9 +5,10 @@
 (function() {
   'use strict';
 
-  function CircularButton(x, y, radius, image) {
+  function CircularButton(x, y, radius, image, periodicity) {
     Item.call(this, x, y, radius * 2, radius * 2, image);
     this.radius = radius;
+    this.periodicity = periodicity;
     this.states.pressed = false;
     this.createBody();
   }
@@ -34,27 +35,36 @@
     Item.prototype.draw.call(this);
 
     if (this.states.pressed) {
-      var opacity = this.getPressForce() / 2 * 0.75;
+      var force = this.getPressForce();
+      var centerRadius = this.radius * 0.83;
+      var ringSize = this.radius - centerRadius;
+      var ringRadius = centerRadius + ringSize / 2;
+
+      var ring = new Path2D();
+      ring.arc(this.pX, this.pY, ringRadius * config.physics.ppm, 0, Math.PI * 2 * force);
 
       ctx.save();
+      ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
+      ctx.lineWidth = ringSize * config.physics.ppm;
+      ctx.stroke(ring);
+      ctx.restore();
 
+      ctx.save();
       ctx.beginPath();
-      ctx.fillStyle = 'rgba(0, 0, 0, ' + opacity + ')';
-      ctx.arc(this.pX, this.pY, this.radius * 0.83 * config.physics.ppm, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.arc(this.pX, this.pY, centerRadius * config.physics.ppm, 0, Math.PI * 2);
       ctx.fill();
-
       ctx.restore();
     }
   };
 
   CircularButton.prototype.getPressForce = function() {
     var time = (Date.now() - this.pressStartTime) / 1000;
-    var max = 4;
-    var normalizedTime = time % max;
-    if (normalizedTime > max / 2) {
-      normalizedTime = max - normalizedTime;
+    var normalizedTime = time % this.periodicity;
+    if (normalizedTime > this.periodicity / 2) {
+      normalizedTime = this.periodicity - normalizedTime;
     }
-    return normalizedTime;
+    return normalizedTime / this.periodicity * 2;
   };
 
   CircularButton.prototype.press = function() {

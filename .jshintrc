@@ -89,6 +89,7 @@
 
     // Custom Globals
     "globals"       : {
+        "Path2D"      : true,
         "_"           : true,
         "p2"          : true,
         "config"      : true,
