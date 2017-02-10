@@ -16,31 +16,31 @@
     this.x = x;
     this.y = y;
     this.pX = this.x * config.physics.ppm;
-    this.pY = config.physics.physicsHeight * 0.61 * config.physics.ppm;
+    this.pY = this.y * config.physics.ppm;
 
     this.radius = radius;
     this.pRadius = this.radius * config.physics.ppm;
 
     if (this.body) {
-      this.body.position = [this.x, this.y];
+      this.body.position = [this.x, config.physics.physicsHeight - this.y];
     }
 
     if (this.axis) {
-      this.axis.position = [this.x, this.y];
+      this.axis.position = [this.x, config.physics.physicsHeight - this.y];
     }
   };
 
   Wheel.prototype.createBody = function() {
     this.body = new p2.Body({
       mass: 1,
-      position: [this.x, this.y]
+      position: [this.x, config.physics.physicsHeight - this.y]
     });
 
     this.body.angularDamping = 0.2;
     this.body.addShape(new p2.Circle(this.radius));
 
     this.axis = new p2.Body({
-      position: [this.x, this.y]
+      position: [this.x, config.physics.physicsHeight - this.y]
     });
 
     this.constraint = new p2.LockConstraint(this.body, this.axis);

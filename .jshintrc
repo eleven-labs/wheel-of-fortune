@@ -89,6 +89,7 @@
 
     // Custom Globals
     "globals"       : {
+        "Path2D"      : true,
         "_"           : true,
         "p2"          : true,
         "config"      : true,
@@ -96,10 +97,12 @@
         "Maths"       : true,
         "Particle"    : true,
         "Point"       : true,
-        "Arrow"       : true,
+        "Item"        : true,
+        "CircularButton": true,
         "world"       : true,
         "wheel"       : true,
         "arrow"       : true,
+        "pushButton"  : true,
         "ctx"         : true
     }        // additional predefined global variables
 }

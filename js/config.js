@@ -54,9 +54,10 @@
     var physicsCenterX = physicsWidth * 0.5;
     var physicsCenterY = physicsHeight * 0.5;
 
-    var wheelRadius = (physicsWidth < physicsHeight * 0.8 ? physicsWidth : physicsHeight * 0.8) * 0.4;
+    var ratio = Math.min(1, physicsWidth / (physicsHeight * 0.8));
+    var wheelRadius = (physicsHeight * 0.8) * ratio * 0.4;
     var wheelX = physicsCenterX;
-    var wheelY = wheelRadius + 4;
+    var wheelY = physicsCenterY * 1.22;
 
     return {
       getUpdatedConfig: getUpdatedConfig,
@@ -85,11 +86,16 @@
       },
 
       arrow: {
-        x: wheelX + wheelRadius + 1.3,
+        x: wheelX + wheelRadius + 0.65,
         y: wheelY,
-        w: wheelRadius * 0.1875,
-        h: wheelRadius * 0.0625,
         image: 'images/rocket-arrow.png',
+      },
+
+      pushButton: {
+        x: wheelX + wheelRadius,
+        y: wheelY - wheelRadius,
+        radius: wheelRadius / 5,
+        image: 'images/big-red-button.png',
       },
 
       sounds: {
@@ -114,5 +120,6 @@
   window.ctx = null;
   window.wheel = null;
   window.arrow = null;
+  window.pushButton = null;
   window.world = null;
 })();
