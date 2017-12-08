@@ -99,7 +99,7 @@
       },
 
       sounds: {
-        wheelSpin: 'http://bramp.net/javascript/wheel.mp3',
+        wheelSpin: 'sounds/wheel.mp3',
         wheelFound: 'sounds/result.mp3',
       },
 
